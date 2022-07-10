@@ -6,7 +6,10 @@
     </div>
   </div>
   <div class="container flex">
-    <div class="w-1/4">Filters here</div>
+    <div class="w-1/4">
+      <AssetFilter />
+      <ApproachFilter />
+    </div>
     <div class="w-1/2 flex-col" >
       <Standard :standard="standard" v-for="(standard, index) in standards" :key="standard.id"/>
     </div>
@@ -19,9 +22,11 @@
 import { actions } from '../api'
 import Standard from './Standard.vue'
 import DomainFilter from './DomainFilter.vue';
+import AssetFilter from './AssetFilter.vue';
+import ApproachFilter from './ApproachFilter.vue';
 export default {
   name: 'Results',
-  components: { Standard, DomainFilter },
+  components: { Standard, DomainFilter, AssetFilter, ApproachFilter },
   data() {
     return {
       search: '',
@@ -33,7 +38,7 @@ export default {
   },
   methods: {
     async getStandards(search) {
-      this.standards = await actions.getStandards(search);
+      this.standards = await actions.getList('standards',search);
     }
   },
   watch: {

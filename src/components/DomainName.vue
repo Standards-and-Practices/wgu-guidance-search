@@ -1,7 +1,6 @@
 <template>
-    <div>
-        
-        <img class="block w-10 absolute -ml-12 mt-3" :src="domainIcon" />
+    <div :style="{ color : domainColor }">
+        <img class="block w-10 absolute -ml-14 mt-4" :src="domainIcon" />
         <img class="answer-mark" :src="answerMark" />
         <span class="domain-name">{{ domain.name }}</span>
     </div>
@@ -25,13 +24,18 @@ export default {
     },
     methods: {
         async getDomain() {
-            this.domain = await actions.getDomain(this.id);
-        }
+            this.domain = await actions.getSingle('domains',this.id);
+        },
     },
     computed: {
         domainIcon() {
             return icons.accessibility;
-        }
+        },
+        domainColor() {
+            if (!this?.domain?.acf?.color) { return '#000000'; }
+            const color = this.domain.acf.color;
+            return `rgba(${color.red},${color.green},${color.blue},${color.alpha})`;
+        },
     }
 }
 </script>
@@ -42,8 +46,9 @@ export default {
     font-size: 8px;
     line-height: 11px;
 }
+
 .answer-mark {
-    @apply block w-10 absolute; 
+    @apply block w-10 absolute;
     margin-left: -76px;
 
 }

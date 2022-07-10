@@ -20,7 +20,7 @@ export default {
     },
     methods: {
         async getPrinciple(id) {
-            this.principle = await actions.getPrinciple(id);
+            this.principle = await actions.getSingle('principles',id);
         }
     },
 }
