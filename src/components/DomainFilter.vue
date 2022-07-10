@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-row justify-center" v-if="domains">
+	<div class="flex gap-4 flex-row justify-center my-4" v-if="domains">
 
 		<div class="flex-column" v-for="(domain, index) in domains" :key="domain.class" @click="toggle(index)">
 			<img class="w-30 mx-auto" :src="domain.selected? domain.icon: domain.iconGray" />
@@ -149,8 +149,14 @@
 	};
 </script>
 
-<style>
+<style scoped>
 .domain-name {
-	@apply break-normal mx-auto uppercase;
+	@apply break-normal mx-auto uppercase text-center w-28;
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 9px;
+	line-height: 130%;
+
 }
 </style>

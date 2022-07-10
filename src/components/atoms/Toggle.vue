@@ -1,11 +1,11 @@
 <template>
 <span class="inline">
-    <img  class="inline" :src="plus" v-if="!open" @click="toggle"/>
-    <img class="inline" :src="minus" v-if="open"  @click="toggle"/>
+    <img  class="inline" :src="plus" v-if="!modelValue" @click="toggle"/>
+    <img class="inline" :src="minus" v-if="modelValue"  @click="toggle"/>
 </span>
 </template>
 <script>
-import icons from "../assets/icons";
+import icons from "../../assets/icons";
 export default {
     name: 'Toggle',
     props: ['modelValue'],
@@ -18,8 +18,7 @@ export default {
     },
     methods: {
         toggle() {
-            this.open = !this.open;
-            this.$emit('update:modelValue', this.open);
+            this.$emit('update:modelValue', !this.modelValue);
         }
     }
 }

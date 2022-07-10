@@ -10,7 +10,7 @@
     <div class="w-1/2 flex-col" >
       <Standard :standard="standard" v-for="(standard, index) in standards" :key="standard.id"/>
     </div>
-    <div class="w-1/4">Blank</div>
+
   </div>
 </template>
 
