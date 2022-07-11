@@ -24,13 +24,14 @@ import Standard from './Standard.vue'
 import DomainFilter from './DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Results',
   components: { Standard, DomainFilter, AssetFilter, ApproachFilter },
   data() {
     return {
       search: '',
-      standards: [],
     }
   },
   mounted() {
@@ -41,7 +42,14 @@ export default {
   },
   methods: {
     async getStandards(search) {
-      this.standards = await api.getList('standards',search, '100');
+      
+      this.$store.dispatch('setStandards', await api.getList('standards',search, '100'))
+    
+    }
+  },
+  computed: {
+    standards() {
+      return this.$store.state.standards;
     }
   },
   watch: {

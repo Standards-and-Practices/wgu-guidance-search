@@ -1,9 +1,9 @@
 <template>
     <div class="mb-5">
         <div class="filter-title">Assets</div>
-        <ul v-if="assets.length">
+        <ul>
             <li v-for="asset in assets" :key="asset.id">
-                <Checkbox />
+                <Checkbox @click="toggleAssetFilter(asset.id)" />
                 {{asset.name}}
             </li>
         </ul>
@@ -11,51 +11,30 @@
 </template>
 
 <script>
-// import api from "../api"
-// import { groupBy } from "lodash-es"
+import api from "../api"
+import { groupBy } from "lodash-es"
 import Checkbox from "./atoms/Checkbox.vue"
-
-const GetAssets = `
-query getAssets {
-  assets(where: {parent: 0, hideEmpty: true}) {
-    nodes {
-      name
-      children {
-        nodes {
-          name
-          id
-          description
-          slug
-          uri
-          count
-          assetId
-        }
-      }
-    }
-  }
-}
-`;
-
 export default {
     name: "AssetFilter",
-    data() {
-        return {
-            assets: []
-        };
+    computed: {
+        assets() {
+            return this.$store.state.assets;
+        }
     },
     mounted() {
         console.log("Initalizing Asset Filter");
-        
-        this.assets = useQuery({ query: GetAssets });
-
+        this.getAssets();
     },
     methods: {
         async getAssets() {
-            // this.assets = await api.getTaxonomy("assets");
-            this.assets = useQuery({
-                query: GetTodos,
-            });
-            console.log("Assets", this.assets);
+            
+            this.$store.dispatch('setAssets', await api.getTaxonomy("assets"));
+            
+        },
+        toggleAssetFilter(assetFilter) {
+
+            this.$store.dispatch('addAssetFilters', assetFilter)
+    
         }
     },
     components: { Checkbox }
