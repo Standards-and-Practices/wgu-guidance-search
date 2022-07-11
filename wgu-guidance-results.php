@@ -39,7 +39,7 @@ function wgu_guidance_styles($hook)
 
     foreach( glob( get_template_directory(). '/dist/assets/*.css' ) as $file ) {
         // $file contains the name and extension of the file
-        wp_enqueue_styles( $file, get_template_directory_uri().'/path/'.$file);
+        wp_enqueue_style( $file, get_template_directory_uri().'/path/'.$file);
     }
 
 

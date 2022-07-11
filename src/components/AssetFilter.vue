@@ -16,12 +16,24 @@
 import Checkbox from "./atoms/Checkbox.vue"
 
 const GetAssets = `
-  GetAssets {
-    assets {
-      id
+query getAssets {
+  assets(where: {parent: 0, hideEmpty: true}) {
+    nodes {
       name
+      children {
+        nodes {
+          name
+          id
+          description
+          slug
+          uri
+          count
+          assetId
+        }
+      }
     }
   }
+}
 `;
 
 export default {
