@@ -25,7 +25,7 @@
 <script>
 	import icons from '../assets/icons';
 	export default {
-		name: 'DomainButtons',
+		name: 'DomainFilter',
 		data() {
 			return {
 				url: '',

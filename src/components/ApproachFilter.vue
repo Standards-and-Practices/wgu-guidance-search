@@ -2,13 +2,34 @@
     <div class="mb-5">
         <div class="filter-title">Approaches</div>
         <ul>
-            <li>Approach</li>
+            <li v-for="approach in approaches" :key="approach.id">
+                <Checkbox />
+                {{approach.name}}
+            </li>
         </ul>
     </div>
 </template>
 <script>
+import api from "../api"
+import Checkbox from "./atoms/Checkbox.vue"
 export default {
-    name:""
+    name: "ApproachFilter",
+    data() {
+        return {
+            approaches: []
+        };
+    },
+    mounted() {
+        console.log("initalizing approachFilter");
+        this.getApproaches();
+    },
+    methods: {
+        async getApproaches() {
+            this.approaches = await api.getList("approaches", "", "100");
+            console.log("Approaches", this.approaches);
+        }
+    },
+    components: { Checkbox }
 }
 </script>
 <style scoped>

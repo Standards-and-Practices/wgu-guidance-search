@@ -7,7 +7,7 @@
 </template>
 <script>
 import icons from '../assets/icons';
-import { actions } from '../api';
+import api from '../api';
 export default {
     name: 'DomainName',
     props: {
@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         async getDomain() {
-            this.domain = await actions.getSingle('domains',this.id);
+            this.domain = await api.getSingle('domains',this.id);
         },
     },
     computed: {

@@ -1,28 +1,21 @@
-export const apiBase = `https://guidance.wgu.edu/standards/wp-json/wp/v2/`;
-
-export function wguGet(url) {
-	let fullUrl = new URL(url, apiBase); 
-    return fullUrl;
-}
-
-export const actions = {
-	async getList(slug, search) {
+export default {
+	async apiRequest(url) {
 		try {
-			console.log(wguGet(`standards?search=${search}`))
-			const response = await fetch(wguGet(`standards?search=${search}`));
+			let fullUrl = new URL(url, `https://guidance.wgu.edu/standards/wp-json/wp/v2/`); 
+			const response = await fetch(fullUrl);
 			const data = await response.json();
 			return data;
 		} catch (err) {
 			console.error(JSON.stringify(err));
 		}
 	},
-	async getSingle(slug,id) {
-		try {
-			const response = await fetch(wguGet(`${slug}/${id}`));
-			const data = await response.json();
-			return data;
-		} catch (err) {
-			console.error(err);
-		}
+	async getList(slug, search, per_page,) {
+		return this.apiRequest(`${slug}?search=${search}&per_page=${per_page}`);
 	},
+	async getSingle(slug,id) {
+		return this.apiRequest(`${slug}/${id}`);
+	},
+	async getTaxonomy(slug) {
+		return this.apiRequest(`${slug}?hide_empty=true&per_page=100`);
+	}
 };

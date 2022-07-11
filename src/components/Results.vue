@@ -19,7 +19,7 @@
 
 <script>
 // import {debounce} from 'lodash-es'
-import { actions } from '../api'
+import api from '../api'
 import Standard from './Standard.vue'
 import DomainFilter from './DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     async getStandards(search) {
-      this.standards = await actions.getList('standards',search);
+      this.standards = await api.getList('standards',search, '100');
     }
   },
   watch: {

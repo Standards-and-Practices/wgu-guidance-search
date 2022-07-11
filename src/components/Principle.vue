@@ -4,7 +4,7 @@
 
 </template>
 <script>
-import {actions} from '../api';
+import api from '../api';
 export default {
     name: 'Principle',
     props: {
@@ -20,7 +20,7 @@ export default {
     },
     methods: {
         async getPrinciple(id) {
-            this.principle = await actions.getSingle('principles',id);
+            this.principle = await api.getSingle('principles',id);
         }
     },
 }
