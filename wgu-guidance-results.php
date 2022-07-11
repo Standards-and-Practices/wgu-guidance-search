@@ -22,7 +22,7 @@
  * GitHub Plugin URI: Standards-and-Practices/wgu-guidance-search
 */
 
-function guidance_scripts($hook)
+function wgu_guidance_scripts($hook)
 {
 
     foreach( glob( get_template_directory(). '/dist/assets/*.js' ) as $file ) {
@@ -32,9 +32,9 @@ function guidance_scripts($hook)
 
 
 }
-add_action('wp_enqueue_scripts', 'guidance_scripts');
+add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
 
-function guidance_styles($hook)
+function wgu_guidance_styles($hook)
 {
 
     foreach( glob( get_template_directory(). '/dist/assets/*.css' ) as $file ) {
@@ -44,4 +44,4 @@ function guidance_styles($hook)
 
 
 }
-add_action('wp_enqueue_styles', 'guidance_styles');
+add_action('wp_enqueue_styles', 'wgu_guidance_styles');
