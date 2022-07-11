@@ -34,6 +34,9 @@ export default {
     }
   },
   mounted() {
+    if (Window.search){
+      this.search = Window.search;
+    }
     this.getStandards(this.search);
   },
   methods: {
