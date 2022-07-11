@@ -27,7 +27,7 @@ import ApproachFilter from './ApproachFilter.vue';
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Results',
+  name: 'Search',
   components: { Standard, DomainFilter, AssetFilter, ApproachFilter },
   data() {
     return {
@@ -42,8 +42,8 @@ export default {
   },
   methods: {
     async getStandards(search) {
-      
-      this.$store.dispatch('setStandards', await api.getList('standards',search, '100'))
+      let results = await api.getList('standards',search, '100');
+      this.$store.dispatch('setStandards', results)
     
     }
   },

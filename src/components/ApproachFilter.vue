@@ -1,37 +1,45 @@
 <template>
     <div class="mb-5">
-        <div class="filter-title">Approaches</div>
+        <div class="filter-title">Approachers</div>
         <ul>
             <li v-for="approach in approaches" :key="approach.id">
-                <Checkbox />
+                <Checkbox @click="toggleApproachFilter(approach.id)" />
                 {{approach.name}}
             </li>
         </ul>
     </div>
 </template>
+
 <script>
 import api from "../api"
+import { groupBy } from "lodash-es"
 import Checkbox from "./atoms/Checkbox.vue"
 export default {
     name: "ApproachFilter",
-    data() {
-        return {
-            approaches: []
-        };
+    computed: {
+        approaches() {
+            return this.$store.state.approaches;
+        }
     },
     mounted() {
-        console.log("initalizing approachFilter");
+        console.log("Initalizing Approach Filter");
         this.getApproaches();
     },
     methods: {
         async getApproaches() {
-            this.approaches = await api.getList("approaches", "", "100");
-            console.log("Approaches", this.approaches);
+            
+            this.$store.dispatch('setApproaches', await api.getTaxonomy("approaches"));
+            
+        },
+        toggleApproachFilter(approachFilter) {
+
+            this.$store.dispatch('addApproachFilters', approachFilter)
+    
         }
     },
     components: { Checkbox }
 }
-</script>
+</script>``
 <style scoped>
 .filter-title {
     font-family: 'Open Sans';
