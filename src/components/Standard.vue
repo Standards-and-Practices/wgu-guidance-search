@@ -1,22 +1,20 @@
 <template>
 
-    <div class="w-full pb-8">
+    <div class="w-full pb-8 ">
         <div v-if="standard.domains">
-            <DomainName v-for="(domain, index) in standard.domains" key="index" :id="domain" />
+            <DomainName v-for="(domain, index) in standard?.domains?.edges" :domain="domain.node" key="index" />
         </div>
-        <a class="text-2xl font-bold">{{ standard.title.rendered }}
-            <Toggle v-model="open" v-if="standard.acf.guidance" />
+        <a class="text-2xl font-bold">{{ standard.title }}
+            <Toggle v-model="open"  />
         </a>
         <div class="w-full flex min-h-max">
 
             <img class="inline pr-2" :src="tag" v-if="standard.principles" />
             <Principle v-for="(principle, index) in standard.principles" key="index" :id="principle" />
-            
+
         </div>
         <div v-if="open">
-            
             <Guidance v-for="(guidance, index) in standard.acf.guidance" :key="index" :guidance="guidance" />
-
         </div>
     </div>
 

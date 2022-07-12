@@ -4,7 +4,7 @@
         <ul>
             <li v-for="asset in assets" :key="asset.id">
                 <Checkbox @click="toggleAssetFilter(asset.id)" />
-                {{asset.name}}
+                {{ asset.name }}
             </li>
         </ul>
     </div>
@@ -12,7 +12,7 @@
 
 <script>
 import api from "../api"
-import { groupBy } from "lodash-es"
+
 import Checkbox from "./atoms/Checkbox.vue"
 export default {
     name: "AssetFilter",
@@ -27,14 +27,14 @@ export default {
     },
     methods: {
         async getAssets() {
-            
+
             this.$store.dispatch('setAssets', await api.getTaxonomy("assets"));
-            
+
         },
         toggleAssetFilter(assetFilter) {
 
             this.$store.dispatch('addAssetFilters', assetFilter)
-    
+
         }
     },
     components: { Checkbox }

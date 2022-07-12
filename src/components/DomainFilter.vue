@@ -1,12 +1,12 @@
 <template>
-	<div class="flex gap-4 flex-row justify-center my-4" v-if="domains">
+	<div class="flex gap-4 flex-row justify-center my-4" v-if="!loading">
 
-		<div class="flex-column" v-for="(domain, index) in domains" :key="domain.class" @click="toggle(index)">
-			<img class="w-30 mx-auto" :src="domain.selected? domain.icon: domain.iconGray" />
-			<p class="domain-name">{{ domain.name }}</p>
+		<div class="flex-column" v-for="(domain, index) in domains?.edges" :key="domain.node.class" @click="toggle(index)">
+			<img class="w-30 mx-auto" :src="domain.node.selected? domain.node.displaySettings.icon: domain.node.displaySettings.iconGray" />
+			<p class="domain-name">{{ domain.node.name }}</p>
 		</div>
 
-		<div class="flex-column" v-if="countSelected < domains.length">
+		<div class="flex-column" v-if="countSelected < domains?.edges">
 			<label @click="showAll">
 				<img class="w-30 mx-auto" :src="all" />
 				<p class="domain-name">Show All</p>
@@ -24,78 +24,18 @@
 
 <script>
 	import icons from '../assets/icons';
+	import queries from '../queries.js';
 	export default {
 		name: 'DomainFilter',
+		apollo: {
+			domains: queries.getDomains,
+		},
 		data() {
 			return {
 				url: '',
 				all: icons.all,
 				none: icons.none,
-				domains: [
-					{
-						selected: true,
-						name: 'Diversity, Equity, & Inclusion',
-						class: 'dei',
-						icon: icons.diversityEquityInclusion,
-						iconGray: icons.diversityEquityInclusionInactive,
-					},
-					{
-						selected: true,
-						name: 'Accessibility',
-						class: 'accessibility',
-						icon: icons.accessibility,
-						iconGray: icons.accessibilityInactive,
-					},
-					{
-						selected: true,
-						name: 'Social & Emotional Learning',
-						class: 'sel',
-						icon: icons.socialEmotionalLearning,
-						iconGray: icons.socialEmotionalLearningInactive,
-					},
-					{
-						selected: true,
-						name: 'Instructional Design',
-						class: 'id',
-						icon: icons.InstructionalDesign,
-						iconGray: icons.InstructionalDesignInactive,
-					},
-					{
-						selected: true,
-						name: 'Assessment',
-						class: 'ad',
-						icon: icons.assessment,
-						iconGray: icons.assessmentInactive,
-					},
-					{
-						selected: true,
-						name: 'Visual Design',
-						class: 'vd',
-						icon: icons.visualDesign,
-						iconGray: icons.visualDesignInactive,
-					},
-					{
-						selected: true,
-						name: 'Prototyping',
-						class: 'prototyping',
-						icon: icons.prototyping,
-						iconGray: icons.prototypingInactive,
-					},
-					{
-						selected: true,
-						name: 'Product Design',
-						class: 'pd',
-						icon: icons.productDesign,
-						iconGray:  icons.productDesignInactive,
-					},
-					{
-						selected: true,
-						name: 'Instructional Technology',
-						class: 'it',
-						icon: icons.instructionalTech,
-						iconGray: icons.instructionalTechInactive,
-					},
-				],
+				loading: false,
 			};
 		},
 		mounted() {
@@ -142,9 +82,9 @@
 			},
 		},
 		computed: {
-			countSelected() {
-				return this.domains.filter((domain) => domain.selected).length;
-			},
+			// countSelected() {
+			// 	return this.domains.edges.filter((domain) => domain.selected).length;
+			// },
 		},
 	};
 </script>
