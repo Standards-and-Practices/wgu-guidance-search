@@ -1,6 +1,6 @@
 <template>
 
-    <span class="inline pr-5 principle-name">{{principle.name}}</span>
+
 
 </template>
 <script>
@@ -8,20 +8,7 @@ import api from '../api';
 export default {
     name: 'Principle',
     props: {
-        id: Number,
-    },
-    data() {
-        return {
-            principle: {},
-        }
-    },
-    mounted() {
-        this.getPrinciple(this.id);
-    },
-    methods: {
-        async getPrinciple(id) {
-            this.principle = await api.getSingle('principles',id);
-        }
+        principle: Object,
     },
 }
 </script>

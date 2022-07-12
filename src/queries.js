@@ -87,6 +87,16 @@ const getStandards = gql`
             }
           }
         }
+        guidance{
+          guidance{
+            guidanceStatement
+            guidanceDetails
+            guidanceRationale
+            guidanceExamples{
+              __typename
+            }
+          }
+        }
       }
     }
   }

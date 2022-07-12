@@ -1,5 +1,5 @@
 <template>
-    <div :style="{ color : domain.displaySettings.color }">
+    <div>
         <img class="block w-10 absolute -ml-14 mt-4" :src="domain.displaySettings.activeIcon.sourceUrl" />
         <img class="answer-mark" :src="answerMark" />
         <span class="domain-name">{{ domain.name }}</span>

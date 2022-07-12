@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h2 class="font-bold text-base border-l-4 border-lime-600 -mx-10 px-10">{{ guidance.guidance_statement }}</h2>
-        <div class="border-l-4 border-lime-600 -mx-10 px-10">{{ guidance.guidance_rationale }}</div>
+        <h2 class="font-bold text-base border-l-4 border-lime-600 -mx-10 px-10">{{ guidance.guidanceStatement }}</h2>
+        <div class="border-l-4 border-lime-600 -mx-10 px-10">{{ guidance.guidanceRationale }}</div>
         <component 
-            :is="getExample(example.acf_fc_layout)" 
-            v-for="(example, index) in guidance.guidance_examples" 
+            :is="getExample(example.guidanceExamples)" 
+            v-for="(example, index) in guidance.guidanceExamples" 
             :key="index" 
             :example="example"
             class="border-l-4 border-dashed border-lime-300 -mx-10 px-10"
