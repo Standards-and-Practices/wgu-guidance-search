@@ -19,45 +19,45 @@
 
 <script>
 // import {debounce} from 'lodash-es'
-import api from '../api'
 import Standard from './Standard.vue'
 import DomainFilter from './DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
-import { mapGetters } from 'vuex'
 import queries from '../queries.js';
 
 export default {
   name: 'Search',
   components: { Standard, DomainFilter, AssetFilter, ApproachFilter },
+  data() {
+    return {
+      search: '',
+    }
+  },
   apollo: {
-    approaches: queries.getApproaches,
-    assets: queries.getAssets,
-    domains: queries.getDomains,
-    standards: queries.getStandards,
+    approaches: {
+      query: queries.getApproaches,
+      variables: {},
+    },
+    assets: {
+      query: queries.getAssets,
+      variables: {},
+    },
+    domains: {
+      query: queries.getDomains,
+      variables: {},
+    },
+    standards: {
+      query: queries.getStandards,
+      variables () {
+        return {
+          search: this.search
+        }
+      }
+    },
   },
   mounted() {
     if (Window.search) {
       this.search = Window.search;
-    }
-    this.getStandards(this.search);
-  },
-  methods: {
-    async getStandards(search) {
-
-      // let results = await api.getList('standards', search, '100');
-      // this.$store.dispatch('setStandards', results)
-
-    }
-  },
-  // computed: {
-  //   standards() {
-  //     return this.$store.state.standards;
-  //   }
-  // },
-  watch: {
-    search(newValue) {
-      this.getStandards(newValue)
     }
   }
 }

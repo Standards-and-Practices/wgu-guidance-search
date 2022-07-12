@@ -5,7 +5,7 @@
             <DomainName v-for="(domain, index) in standard?.domains?.edges" :domain="domain.node" key="index" />
         </div>
         <a class="text-2xl font-bold">{{ standard.title }}
-            <Toggle v-model="open" />
+            <Toggle v-model="open" v-if="standard.guidance.guidance"/>
         </a>
         <div class="w-full flex min-h-max" :style="{ color: computedColor }">
 
@@ -19,7 +19,7 @@
 
         </div>
         <div v-if="open">
-            <Guidance v-for="(guidance, index) in standard.guidance.guidance" :key="index" :guidance="guidance" />
+            <Guidance v-for="(guidance, index) in standard.guidance.guidance" :key="index" :guidance="guidance" :color="computedColor" :colorFaded="computedColorFaded" />
         </div>
     </div>
 
@@ -47,6 +47,9 @@ export default {
     computed: {
         computedColor() {
             return this.standard.domains.edges[0].node.displaySettings.color;
+        },
+        computedColorFaded() {
+            return this.standard.domains.edges[0].node.displaySettings.fadedColor;
         },
     }
 }

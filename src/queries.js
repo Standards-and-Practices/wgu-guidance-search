@@ -53,7 +53,7 @@ const getDomains = gql`
 `;
 
 const getStandards = gql`
-	query getStandards($search: String = "") {
+	query getStandards($search: String!) {
   standards(where: {search: $search, status: PUBLISH}) {
     edges {
       node {

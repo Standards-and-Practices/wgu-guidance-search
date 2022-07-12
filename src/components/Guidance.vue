@@ -1,13 +1,14 @@
 <template>
     <div>
-        <h2 class="font-bold text-base border-l-4 border-lime-600 -mx-10 px-10">{{ guidance.guidanceStatement }}</h2>
-        <div class="border-l-4 border-lime-600 -mx-10 px-10">{{ guidance.guidanceRationale }}</div>
+        <h2 :style="{'border-left-color' : color }" class="font-bold text-base border-l-4 -mx-10 px-10">{{ guidance.guidanceStatement }}</h2>
+        <div :style="{'border-left-color' : color }" class="border-l-4 -mx-10 px-10">{{ guidance.guidanceRationale }}</div>
         <component 
             :is="getExample(example.guidanceExamples)" 
             v-for="(example, index) in guidance.guidanceExamples" 
             :key="index" 
             :example="example"
-            class="border-l-4 border-dashed border-lime-300 -mx-10 px-10"
+            class="border-l-4 border-dashed -mx-10 px-10"
+            :style="{'border-left-color' : colorFaded }"
         ></component>
     </div>
 </template>
@@ -22,7 +23,9 @@ import Text from "./examples/text.vue"
 export default {
     name: "Guidance",
     props: {
-        guidance: Object
+        guidance: Object,
+        color: String,
+        colorFaded: String,
     },
     methods: {
         getExample(acf_fc_layout) {
