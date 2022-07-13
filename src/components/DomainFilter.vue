@@ -3,7 +3,7 @@
 
 		<div class="flex-column" v-for="domain in domains?.edges" :key="domain.node.class" @click="toggle(domain.node.databaseId)">
 			<img class="w-30 mx-auto mb-2" :src="isActive(domain.node.databaseId) ? domain.node.displaySettings.activeIcon.sourceUrl : domain.node.displaySettings.inactiveIcon.sourceUrl" />
-			<p class="domain-name">{{ domain.node.name }}</p>
+			<p class="domain-name" :style="{ color: domain?.node?.displaySettings?.color }" >{{ domain.node.name }}</p>
 		</div>
 
 		<div class="flex-column" >
@@ -38,28 +38,30 @@
 			};
 		},
 		mounted() {
-			// if (localStorage.domains) {
-			// 	this.retrieve();
-			// }
+			if (localStorage.domains) {
+				this.retrieve();
+			}
 			this.url = window.location.href;
 		},
 		methods: {
-			// persist() {
-			// 	this.$forceUpdate();
-			// 	localStorage.domains = JSON.stringify(this.domains);
-			// 	console.log('persist');
-			// },
-			// retrieve() {
-			// 	this.domains = JSON.parse(localStorage.domains);
-			// },
+			persist() {
+				this.$forceUpdate();
+				localStorage.domains = JSON.stringify(this.activeDomainFilters);
+			},
+			retrieve() {
+				const activeDomainFilters = JSON.parse(localStorage.domains);
+				activeDomainFilters.forEach(domain => this.show( domain) );
+			},
 			async toggle(databaseId) {
 				this.isActive(databaseId) ? this.hide(databaseId) : this.show(databaseId)
 			},
 			show(databaseId) {
-				this.$store.dispatch('addDomainFilter', databaseId)				
+				this.$store.dispatch('addDomainFilter', databaseId)	
+				this.persist()			
 			},
 			hide(databaseId) {
 				this.$store.dispatch('removeDomainFilter', databaseId)
+				this.persist()
 			},
 			showAll() {
 				this.domains.edges.forEach(domain => { this.show( domain.node.databaseId ) });
@@ -87,6 +89,5 @@
 	font-weight: 700;
 	font-size: 9px;
 	line-height: 130%;
-
 }
 </style>

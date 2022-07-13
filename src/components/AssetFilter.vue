@@ -2,9 +2,9 @@
     <div class="mb-5">
         <div class="filter-title">Assets</div>
         <ul>
-            <li v-for="asset in assets" :key="asset.id">
-                <Checkbox @click="toggleAssetFilter(asset.id)" />
-                {{ asset.name }}
+            <li v-for="asset in assets" :key="asset.node.id">
+                <Checkbox @click="toggleAssetFilter(asset.node.id)" />
+                {{ asset.node.name }}
             </li>
         </ul>
     </div>

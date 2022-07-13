@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-if="$apollo.loading">Loading...</div>
     <DomainFilter />
     <div class="w-1/2 my-8 mx-auto">
       <input v-model="search" type="search" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
@@ -36,28 +37,43 @@ export default {
   apollo: {
     approaches: {
       query: queries.getApproaches,
-      variables: {},
+      result (results) {
+        this.$store.dispatch('setApproaches', results.data.approaches.edges)
+      }
     },
     assets: {
       query: queries.getAssets,
-      variables: {},
+      result (results) {
+        this.$store.dispatch('setAssets', results.data.assets.edges)
+      }
     },
     domains: {
       query: queries.getDomains,
-      variables: {},
+      result (results) {
+        this.$store.dispatch('setDomains', results.data.domains.edges)
+      }
     },
     standards: {
       query: queries.getStandards,
-      variables () {
+      variables() {
         return {
-          search: this.search
+          search: this.search,
         }
+      },
+      debounce: 500,
+      result (results) {
+        this.$store.dispatch('setStandards', results.data.standards.edges)
       }
     },
   },
   mounted() {
     if (Window.search) {
       this.search = Window.search;
+    }
+  },
+  computed: {
+    activeDomainsArray() {
+      return this.$store.state.filters.domainFilters.map(String)
     }
   }
 }

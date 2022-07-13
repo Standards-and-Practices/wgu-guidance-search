@@ -2,9 +2,9 @@
     <div class="mb-5">
         <div class="filter-title">Approachers</div>
         <ul>
-            <li v-for="approach in approaches" :key="approach.id">
-                <Checkbox @click="toggleApproachFilter(approach.id)" />
-                {{approach.name}}
+            <li v-for="approach in approaches" :key="approach.node.id">
+                <Checkbox @click="toggleApproachFilter(approach.node.id)" />
+                {{approach.node.name}}
             </li>
         </ul>
     </div>

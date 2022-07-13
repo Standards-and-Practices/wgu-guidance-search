@@ -11,7 +11,7 @@
             </g>
         </svg>
 
-        <span class="domain-name">{{ domain.name }}</span>
+        <a class="domain-name" :href="domain.url">{{ domain.name }}</a>
     </div>
 </template>
 <script>
