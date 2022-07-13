@@ -1,6 +1,6 @@
 <template>
 
-    <div class="w-full pb-8 ">
+    <div class="standard">
         <div :style="{ color: computedColor }">
             <DomainName v-for="(domain, index) in standard?.domains?.edges" :domain="domain.node" key="index" />
         </div>
@@ -28,13 +28,12 @@
 <script>
 import DomainName from "./DomainName.vue";
 import Guidance from './Guidance.vue';
-import Principle from "./Principle.vue";
 import Toggle from './atoms/Toggle.vue';
 import icons from '../assets/icons';
 
 export default {
     name: 'Standard',
-    components: { DomainName, Guidance, Principle, Toggle },
+    components: { DomainName, Guidance, Toggle },
     props: {
         standard: Object,
     },
@@ -55,6 +54,11 @@ export default {
 }
 </script>
 <style scoped>
+.standard {
+    @apply w-full pb-8;
+    height: auto;
+    min-height: 170px;
+}
 .principle-name {
     @apply uppercase font-bold text-center text-xs;
     font-size: 8px;

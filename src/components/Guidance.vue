@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 :style="{'border-left-color' : color }" class="font-bold text-base border-l-4 -mx-10 px-10">{{ guidance.guidanceStatement }}</h2>
+        <h2 :style="{'border-left-color' : color }" class="font-bold text-base border-l-4 -mx-10 px-10 pt-3">{{ guidance.guidanceStatement }}</h2>
         <div :style="{'border-left-color' : color }" class="border-l-4 -mx-10 px-10">{{ guidance.guidanceRationale }}</div>
         <component 
             :is="getExample(example.guidanceExamples)" 

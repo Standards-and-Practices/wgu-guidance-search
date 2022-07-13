@@ -1,20 +1,20 @@
 <template>
-	<div class="flex gap-4 flex-row justify-center my-4" v-if="!loading">
+	<div class="flex gap-2 flex-row justify-center my-4">
 
-		<div class="flex-column" v-for="(domain, index) in domains?.edges" :key="domain.node.class" @click="toggle(index)">
-			<img class="w-30 mx-auto" :src="domain.node.selected? domain.node.displaySettings.icon: domain.node.displaySettings.iconGray" />
+		<div class="flex-column" v-for="domain in domains?.edges" :key="domain.node.class" @click="toggle(domain.node.databaseId)">
+			<img class="w-30 mx-auto mb-2" :src="isActive(domain.node.databaseId) ? domain.node.displaySettings.activeIcon.sourceUrl : domain.node.displaySettings.inactiveIcon.sourceUrl" />
 			<p class="domain-name">{{ domain.node.name }}</p>
 		</div>
 
-		<div class="flex-column" v-if="countSelected < domains?.edges">
+		<div class="flex-column" >
 			<label @click="showAll">
-				<img class="w-30 mx-auto" :src="all" />
+				<img class="w-30 mx-auto mb-2" :src="all" />
 				<p class="domain-name">Show All</p>
 			</label>
 		</div>
-		<div class="flex-column" v-if="countSelected > 0">
+		<div class="flex-column">
 			<label @click="hideAll">
-				<img class="w-30 mx-auto" :src="none" />
+				<img class="w-30 mx-auto mb-2" :src="none" />
 				<p class="domain-name">Hide All</p>
 			</label>
 		</div>
@@ -35,57 +35,47 @@
 				url: '',
 				all: icons.all,
 				none: icons.none,
-				loading: false,
 			};
 		},
 		mounted() {
-			if (localStorage.domains) {
-				this.retrieve();
-			}
+			// if (localStorage.domains) {
+			// 	this.retrieve();
+			// }
 			this.url = window.location.href;
 		},
 		methods: {
-			persist() {
-				this.$forceUpdate();
-				localStorage.domains = JSON.stringify(this.domains);
-				console.log('persist');
+			// persist() {
+			// 	this.$forceUpdate();
+			// 	localStorage.domains = JSON.stringify(this.domains);
+			// 	console.log('persist');
+			// },
+			// retrieve() {
+			// 	this.domains = JSON.parse(localStorage.domains);
+			// },
+			async toggle(databaseId) {
+				this.isActive(databaseId) ? this.hide(databaseId) : this.show(databaseId)
 			},
-			retrieve() {
-				this.domains = JSON.parse(localStorage.domains);
+			show(databaseId) {
+				this.$store.dispatch('addDomainFilter', databaseId)				
 			},
-			async toggle(index) {
-				this.domains[index].selected = !this.domains[index].selected;
-				this.persist();
-			},
-			show(index) {
-				this.domains[index].selected = true;
-				this.persist();
-			},
-			hide(index) {
-				this.domains[index].selected = false;
-				this.persist();
+			hide(databaseId) {
+				this.$store.dispatch('removeDomainFilter', databaseId)
 			},
 			showAll() {
-				this.domains.forEach((domain) => {
-					domain.selected = true;
-				});
-				this.persist();
+				this.domains.edges.forEach(domain => { this.show( domain.node.databaseId ) });
 			},
 			hideAll() {
-				this.domains.forEach((domain) => {
-					domain.selected = false;
-				});
-				this.persist();
+				this.domains.edges.forEach(domain => { this.hide( domain.node.databaseId ) });
 			},
-			rightIcon(domain) {
-				return domain.selected ? domain.icon : domain.iconGray;
+			isActive(databaseId) {
+				return this.activeDomainFilters.includes(databaseId);
 			},
 		},
 		computed: {
-			// countSelected() {
-			// 	return this.domains.edges.filter((domain) => domain.selected).length;
-			// },
-		},
+			activeDomainFilters() {
+				return this.$store.state.filters.domainFilters
+			},
+		}
 	};
 </script>
 

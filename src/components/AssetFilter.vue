@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import api from "../api"
-
 import Checkbox from "./atoms/Checkbox.vue"
 export default {
     name: "AssetFilter",
@@ -21,20 +19,9 @@ export default {
             return this.$store.state.assets;
         }
     },
-    mounted() {
-        console.log("Initalizing Asset Filter");
-        this.getAssets();
-    },
     methods: {
-        async getAssets() {
-
-            this.$store.dispatch('setAssets', await api.getTaxonomy("assets"));
-
-        },
         toggleAssetFilter(assetFilter) {
-
             this.$store.dispatch('addAssetFilters', assetFilter)
-
         }
     },
     components: { Checkbox }

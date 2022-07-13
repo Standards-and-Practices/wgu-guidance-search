@@ -31,7 +31,7 @@ const getDomains = gql`
 		domains {
 			edges {
 				node {
-					id
+					databaseId
 					name
 					uri
 					description

@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import api from "../api"
-import { groupBy } from "lodash-es"
 import Checkbox from "./atoms/Checkbox.vue"
 export default {
     name: "ApproachFilter",
@@ -21,16 +19,8 @@ export default {
             return this.$store.state.approaches;
         }
     },
-    mounted() {
-        console.log("Initalizing Approach Filter");
-        this.getApproaches();
-    },
     methods: {
-        async getApproaches() {
-            
-            this.$store.dispatch('setApproaches', await api.getTaxonomy("approaches"));
-            
-        },
+
         toggleApproachFilter(approachFilter) {
 
             this.$store.dispatch('addApproachFilters', approachFilter)

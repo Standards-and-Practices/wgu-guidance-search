@@ -10,7 +10,7 @@
       <AssetFilter />
       <ApproachFilter />
     </div>
-    <div class="w-1/2 flex-col" v-if="!this.loading && standards?.edges">
+    <div class="w-2/3 flex-col" v-if="standards?.edges">
       <Standard :standard="standard.node" v-for="(standard, index) in standards.edges" :key="standard.id" />
     </div>
 
