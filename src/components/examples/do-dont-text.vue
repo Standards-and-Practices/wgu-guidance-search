@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-row gap-5 py-5">
         <div class="do">
-            <h3 class="">{{ example.do_text }}</h3>
-            {{ example.do_description }}
+            <h3 class="font-bold py-2">{{ example.doText }}</h3>
+            {{ example.doDescription }}
         </div>
         <div class="dont">
-            <h3 class="">{{ example.dont_text }}</h3>
-            {{ example.dont_description }}
+            <h3 class="font-bold py-2">{{ example.dontText }}</h3>
+            {{ example.dontDescription }}
         </div>
     </div>
 </template>
@@ -18,7 +18,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .do {
     width: 200px;
     height: 200px;

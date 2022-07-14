@@ -57,54 +57,83 @@ const getDomains = gql`
 `;
 
 const getStandards = gql`
-	query getStandards($search: String = "", $activeDomains: [String] = [""]) {
-		standards(where: { search: $search, taxQuery: { relation: OR, taxArray: [{ terms: $activeDomains, taxonomy: DOMAIN, operator: IN, field: ID }] } }) {
-			edges {
-				node {
-					domains {
-						edges {
-							node {
-								databaseId
-								name
-								displaySettings {
-									activeIcon {
-										sourceUrl
-									}
-									inactiveIcon {
-										sourceUrl
-									}
-									color
-									fadedColor
-								}
-								uri
-							}
-						}
-					}
-					uri
-					title
-					principles {
-						edges {
-							node {
-								name
-								uri
-								databaseId
-							}
-						}
-					}
-					guidance {
-						guidance {
-							guidanceStatement
-							guidanceDetails
-							guidanceRationale
-							guidanceExamples {
-								__typename
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	query getStandards($search: String = "") {
+  standards(
+    where: {search: $search}
+  ) {
+    edges {
+      node {
+        domains {
+          edges {
+            node {
+              databaseId
+              name
+              displaySettings {
+                activeIcon {
+                  sourceUrl
+                }
+                inactiveIcon {
+                  sourceUrl
+                }
+                color
+                fadedColor
+              }
+              uri
+            }
+          }
+        }
+        uri
+        title
+        principles {
+          edges {
+            node {
+              name
+              uri
+              databaseId
+            }
+          }
+        }
+        guidance {
+          guidance {
+            guidanceStatement
+            guidanceDetails
+            guidanceRationale
+            guidanceExamples {
+              __typename
+              ... on Standard_Guidance_guidance_GuidanceExamples_DoDontText {
+                doDescription
+                doText
+                dontDescription
+                dontText
+              }
+              ... on Standard_Guidance_guidance_GuidanceExamples_DoDontImage {
+                doCaption
+                doImage {
+                  sourceUrl
+                }
+                dontCaption
+                dontImage{
+                  sourceUrl
+                }
+              }
+              ... on Standard_Guidance_guidance_GuidanceExamples_Text {
+                text
+              }
+              ... on Standard_Guidance_guidance_GuidanceExamples_Media {
+                file{
+                  sourceUrl
+                }
+              }
+              ... on Standard_Guidance_guidance_GuidanceExamples_Code{
+                code
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 `;
 
 export default {

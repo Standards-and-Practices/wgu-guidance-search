@@ -3,7 +3,7 @@
         <h2 :style="{'border-left-color' : color }" class="font-bold text-base border-l-4 -mx-10 px-10 pt-3">{{ guidance.guidanceStatement }}</h2>
         <div :style="{'border-left-color' : color }" class="border-l-4 -mx-10 px-10">{{ guidance.guidanceRationale }}</div>
         <component 
-            :is="getExample(example.guidanceExamples)" 
+            :is="getExample(example.__typename)" 
             v-for="(example, index) in guidance.guidanceExamples" 
             :key="index" 
             :example="example"
@@ -30,20 +30,20 @@ export default {
     methods: {
         getExample(acf_fc_layout) {
             switch (acf_fc_layout) {
-                case 'code':
+                case 'Standard_Guidance_guidance_GuidanceExamples_Code':
                     return Code
                     break;
-                case 'do_dont_image':
+                case 'Standard_Guidance_guidance_GuidanceExamples_DoDontImage':
                     return DoDontImage
                     break;
-                case 'do_dont_text':
+                case 'Standard_Guidance_guidance_GuidanceExamples_DoDontText':
                     return DoDontText
                     break;
-                case 'do_dont_image':
-                    return DoDontImage
-                    break;
-                case 'media':
+                case 'Standard_Guidance_guidance_GuidanceExamples_Media':
                     return Media
+                    break;
+                case 'Standard_Guidance_guidance_GuidanceExamples_Text':
+                    return_Text
                     break;
                 default:
                     return Text;
