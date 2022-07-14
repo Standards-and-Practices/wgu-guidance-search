@@ -2,10 +2,10 @@ import gql from 'graphql-tag';
 
 const getApproaches = gql`
 	query getApproaches {
-		approaches(where: { orderby: NAME, hideEmpty: true, parent: 0 }) {
+		approaches(first:1000, where: { orderby: NAME, hideEmpty: true, parent: 0 }) {
 			edges {
 				node {
-					id
+					databaseId
 					name
 					uri
 					count
@@ -17,10 +17,10 @@ const getApproaches = gql`
 
 const getAssets = gql`
 	query getAssets {
-		assets(where: { orderby: NAME, hideEmpty: true, parent: 0 }) {
+		assets(first:1000, where: { orderby: NAME, hideEmpty: true, parent: 0 }) {
 			edges {
 				node {
-					id
+					databaseId
 					name
 					uri
 					count
@@ -32,7 +32,7 @@ const getAssets = gql`
 
 const getDomains = gql`
 	query getDomains {
-		domains {
+		domains(first:1000, where: { orderby: TERM_ORDER }) {
 			edges {
 				node {
 					databaseId
@@ -58,23 +58,7 @@ const getDomains = gql`
 
 const getStandards = gql`
 	query getStandards($search: String = "", $activeDomains: [String] = [""]) {
-		standards(
-			where: { 
-				search: $search, 
-				taxQuery: { 
-						relation: OR, 
-						taxArray: [
-							{
-								terms: $activeDomains,
-								taxonomy: DOMAIN,
-								operator: IN,
-								field: ID
-							},
-						]
-				} 
-			}
-		
-		) {
+		standards(where: { search: $search, taxQuery: { relation: OR, taxArray: [{ terms: $activeDomains, taxonomy: DOMAIN, operator: IN, field: ID }] } }) {
 			edges {
 				node {
 					domains {

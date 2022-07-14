@@ -3,8 +3,7 @@
         <div class="filter-title">Assets</div>
         <ul>
             <li v-for="asset in assets" :key="asset.node.id">
-                <Checkbox @click="toggleAssetFilter(asset.node.id)" />
-                {{ asset.node.name }}
+                <Checkbox @click="toggleAssetFilter(asset.node.id)" :label="label(asset.node.name, asset.node.count)" />
             </li>
         </ul>
     </div>
@@ -17,14 +16,18 @@ export default {
     computed: {
         assets() {
             return this.$store.state.assets;
-        }
+        },
     },
     methods: {
         toggleAssetFilter(assetFilter) {
             this.$store.dispatch('addAssetFilters', assetFilter)
+        },
+        label(name, count) {
+            const filterCount = count ? count : '0';
+            return `${name} (${filterCount})`
         }
     },
-    components: { Checkbox }
+    components: { Checkbox },
 }
 </script>
 <style scoped>

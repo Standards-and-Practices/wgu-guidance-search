@@ -1,7 +1,7 @@
 <template>
 	<div class="flex gap-2 flex-row justify-center my-4">
 
-		<div class="flex-column" v-for="domain in domains?.edges" :key="domain.node.class" @click="toggle(domain.node.databaseId)">
+		<div class="flex-column" v-for="domain in domains" :key="domain.node.class" @click="toggle(domain.node.databaseId)">
 			<img class="w-30 mx-auto mb-2" :src="isActive(domain.node.databaseId) ? domain.node.displaySettings.activeIcon.sourceUrl : domain.node.displaySettings.inactiveIcon.sourceUrl" />
 			<p class="domain-name" :style="{ color: domain?.node?.displaySettings?.color }" >{{ domain.node.name }}</p>
 		</div>
@@ -24,15 +24,10 @@
 
 <script>
 	import icons from '../assets/icons';
-	import queries from '../queries.js';
 	export default {
 		name: 'DomainFilter',
-		apollo: {
-			domains: queries.getDomains,
-		},
 		data() {
 			return {
-				url: '',
 				all: icons.all,
 				none: icons.none,
 			};
@@ -40,8 +35,9 @@
 		mounted() {
 			if (localStorage.domains) {
 				this.retrieve();
+			} else {
+				this.showAll();
 			}
-			this.url = window.location.href;
 		},
 		methods: {
 			persist() {
@@ -64,16 +60,19 @@
 				this.persist()
 			},
 			showAll() {
-				this.domains.edges.forEach(domain => { this.show( domain.node.databaseId ) });
+				this.domains.forEach(domain => { this.show( domain.node.databaseId ) });
 			},
 			hideAll() {
-				this.domains.edges.forEach(domain => { this.hide( domain.node.databaseId ) });
+				this.domains.forEach(domain => { this.hide( domain.node.databaseId ) });
 			},
 			isActive(databaseId) {
 				return this.activeDomainFilters.includes(databaseId);
 			},
 		},
 		computed: {
+			domains() {
+				return this.$store.state.domains;
+			},
 			activeDomainFilters() {
 				return this.$store.state.filters.domainFilters
 			},

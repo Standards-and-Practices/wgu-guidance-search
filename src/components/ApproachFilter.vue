@@ -3,8 +3,7 @@
         <div class="filter-title">Approachers</div>
         <ul>
             <li v-for="approach in approaches" :key="approach.node.id">
-                <Checkbox @click="toggleApproachFilter(approach.node.id)" />
-                {{approach.node.name}}
+                <Checkbox @click="toggleAssetFilter(approach.node.id)" :label="label(approach.node.name, approach.node.count)" />
             </li>
         </ul>
     </div>
@@ -23,8 +22,12 @@ export default {
 
         toggleApproachFilter(approachFilter) {
 
-            this.$store.dispatch('addApproachFilters', approachFilter)
+            this.$store.dispatch('addApproachFilter', approachFilter)
     
+        },
+        label(name, count) {
+            const filterCount = count ? count : '0';
+            return `${name} (${filterCount})`
         }
     },
     components: { Checkbox }

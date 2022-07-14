@@ -29,13 +29,19 @@ const store = createStore({
         state.standards = standards;
       },
       addAssetFilter (state, assetFilter) {
-        state.filters.assetsFilters.push(assetFilter);
+        if(!state.filters.assetsFilters.includes(assetFilter)) {
+          state.filters.assetsFilters.push(assetFilter);
+        }
       },
       addDomainFilter (state, domainFilter) {
-        state.filters.domainFilters.push(domainFilter);
+        if(!state.filters.domainFilters.includes(domainFilter)) {
+          state.filters.domainFilters.push(domainFilter);
+        }
       },
       addApproachFilter (state, approachFilter) {
-        state.filters.approachFilters.push(approachFilter);
+        if(!state.filters.approachFilters.includes(approachFilter)) {
+          state.filters.approachFilters.push(approachFilter);
+        }
       },
       removeAssetFilters (state, assetFilter) {
         state.filters.assetsFilters =  state.filters.assetsFilters.splice (filter => { return filter !== assetFilter });
@@ -62,6 +68,9 @@ const store = createStore({
         },
         addAssetFilters (context, assetFilter) {
             context.commit('addAssetFilter', assetFilter);
+        },
+        addApproachFilter (context, approachFilter) {
+            context.commit('addApproachFilter', approachFilter);
         },
         addDomainFilter (context, domainFilter) {
           context.commit('addDomainFilter', domainFilter);
