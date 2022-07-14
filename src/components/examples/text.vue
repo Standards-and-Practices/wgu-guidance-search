@@ -1,5 +1,5 @@
 <template>
-    <div>Text Example</div>
+    <div class="p-2 w-full">{{example.text}}}</div>
 </template>
 <script>
 export default {

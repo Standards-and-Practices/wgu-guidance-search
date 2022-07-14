@@ -43,7 +43,7 @@ export default {
                     return Media
                     break;
                 case 'Standard_Guidance_guidance_GuidanceExamples_Text':
-                    return_Text
+                    return Text
                     break;
                 default:
                     return Text;
