@@ -86,14 +86,11 @@ this in the docs: http://dev.apollodata.com/core/fragments.html#unique-names`):o
 		}
 	}
 `,Ky=ci`
-	query getStandards($search: String = "", $taxArray: [RootQueryToStandardConnectionWhereArgsTaxArray]) {
+	query getStandards($search: String = "") {
   standards(
     where: {
-      search: $search, 
-      taxQuery: {
-        relation: OR,
-        taxArray: $taxArray
-      }}
+      search: $search,
+      }
   ) {
     edges {
       node {

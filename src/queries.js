@@ -57,14 +57,11 @@ const getDomains = gql`
 `;
 
 const getStandards = gql`
-	query getStandards($search: String = "", $taxArray: [RootQueryToStandardConnectionWhereArgsTaxArray]) {
+	query getStandards($search: String = "") {
   standards(
     where: {
-      search: $search, 
-      taxQuery: {
-        relation: OR,
-        taxArray: $taxArray
-      }}
+      search: $search,
+      }
   ) {
     edges {
       node {
