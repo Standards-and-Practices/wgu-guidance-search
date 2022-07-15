@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // import {debounce} from 'lodash-es'
 import Standard from './Standard.vue'
 import DomainFilter from './DomainFilter.vue';
@@ -26,11 +26,12 @@ import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
 import queries from '../queries.js';
 import { 
-  TaxonomyEnum, 
-  RootQueryToStandardConnectionWhereArgsTaxQuery,
+  TaxonomyEnum,
+  RelationEnum,
   RootQueryToStandardConnectionWhereArgsTaxQueryField, 
   RootQueryToStandardConnectionWhereArgsTaxQueryOperator
-} from '../generated/graphql.ts';
+} from '../generated/graphql';
+import type { RootQueryToStandardConnectionWhereArgsTaxArray, RootQueryToStandardConnectionWhereArgsTaxQuery } from '../generated/graphql';
 
 export default {
   name: 'Search',
@@ -80,8 +81,9 @@ export default {
     },
   },
   mounted() {
-    if (Window.search) {
-      this.search = Window.search;
+  
+    if (globalThis.search) {
+      this.search = globalThis.search;
     }
   },
   computed: {
@@ -95,9 +97,8 @@ export default {
       return this.$store.state.filters.approachFilters
     },
     taxQuery () {
-      let taxArray = new RootQueryToStandardConnectionWhereArgsTaxQuery()
-      
-      let domainFilterArray = {
+       
+      let domainFilterArray:RootQueryToStandardConnectionWhereArgsTaxArray = {
         field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         includeChildren: true,
         operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
@@ -105,8 +106,11 @@ export default {
         terms: this.activeDomainsArray.map(String),
       };
 
-      taxArray.push(domainFilterArray)
-
+      let taxQuery:RootQueryToStandardConnectionWhereArgsTaxQuery = {
+        relation: RelationEnum.Or,
+        taxArray: [domainFilterArray] 
+      };
+      
       // if(this.activeAssetsArray) {
       //   let assetFilterObject = new RootQueryToStandardConnectionWhereArgsTaxQuery();
       //   assetFilterObject.field = RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId
@@ -125,8 +129,8 @@ export default {
       //   approachFilterObject.terms = this.activeApproachesArray
       //   taxonomyArray.push(approachFilterObject)
       // }
-      console.log(taxArray)
-      return taxArray;
+      console.log(taxQuery)
+      return taxQuery;
     }
   }
 }
