@@ -25,7 +25,7 @@ import DomainFilter from './DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
 import queries from '../queries.js';
-
+import { TaxonomyEnum, RootQueryToStandardConnectionWhereArgsTaxQueryField, RootQueryToStandardConnectionWhereArgsTaxQueryOperator} from '../generated/graphql';
 
 export default {
   name: 'Search',
@@ -57,10 +57,16 @@ export default {
     standards: {
       query: queries.getStandards,
       variables() {
-        return {
+
+        let queryVars = {
           search: this.search,
-          taxArray: this.taxArray
+          // taxArray: [],
         }
+
+        // if (this.activeDomainsArray) {
+        //   queryVars.taxArray = this.taxArray
+        // }
+        return queryVars
       },
       debounce: 500,
       result (results) {
@@ -85,43 +91,39 @@ export default {
     },
     taxArray () {
       
-      let taxonomyArray = [];
+      let taxArray = []
       
-      let domainFilterObject = {
-        field: "TAXONOMY_ID",
-        includeChildren: true,
-        taxonomy: "DOMAIN",
-        operator: "IN",
-        terms: this.activeDomainsArray
-      }
-      let assetFilterObject = {
-        field: "TAXONOMY_ID",
-        includeChildren: true,
-        taxonomy: "ASSET",
-        operator: "IN",
-        terms: this.activeAssetsArray
-      }
-      let approachFilterObject = {
-        field: "TAXONOMY_ID",
-        includeChildren: true,
-        taxonomy: "APPROACH",
-        operator: "IN",
-        terms: this.activeApproachesArray
-      }
 
-      if (domainFilterObject.term) {
-        taxonomyArray.push(domainFilterObject)
-      }
+        let domainFilterArray = {
+          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+          includeChildren: true,
+          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+          taxonomy: TaxonomyEnum.Domain,
+          terms: this.activeDomainsArray.map(String),
+        };
 
-      if (assetFilterObject.term) {
-        taxonomyArray.push(assetFilterObject)
-      }
+        taxArray.push(domainFilterArray)
 
-      if (approachFilterObject.term) {
-        taxonomyArray.push(approachFilterObject)
-      }
-
-      return taxonomyArray;
+      // if(this.activeAssetsArray) {
+      //   let assetFilterObject = new RootQueryToStandardConnectionWhereArgsTaxQuery();
+      //   assetFilterObject.field = RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId
+      //   assetFilterObject.includeChildren = true
+      //   assetFilterObject.taxonomy = 'ASSET'
+      //   assetFilterObject.operator = RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In
+      //   assetFilterObject.terms = this.activeAssetsArray
+      //   taxonomyArray.push(assetFilterObject)
+      // }
+      // if(this.activeApproachesArray) {
+      //   let approachFilterObject  = new RootQueryToStandardConnectionWhereArgsTaxQuery();
+      //   approachFilterObject.field = RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId
+      //   approachFilterObject.includeChildren = true
+      //   approachFilterObject.taxonomy = 'APPROACH'
+      //   approachFilterObject.operator = RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In
+      //   approachFilterObject.terms = this.activeApproachesArray
+      //   taxonomyArray.push(approachFilterObject)
+      // }
+      console.log(taxArray)
+      return taxArray;
     }
   }
 }

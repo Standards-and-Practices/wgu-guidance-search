@@ -1,6 +1,6 @@
 <template>
     <div class="mb-5">
-        <div class="filter-title">Approachers</div>
+        <div class="filter-title">Approaches</div>
         <ul>
             <li v-for="approach in approaches" :key="approach.node.id">
                 <Checkbox @click="toggleAssetFilter(approach.node.id)" :label="label(approach.node.name, approach.node.count)" />
