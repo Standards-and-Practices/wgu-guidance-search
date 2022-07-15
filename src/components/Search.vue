@@ -26,6 +26,7 @@ import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
 import queries from '../queries.js';
 
+
 export default {
   name: 'Search',
   components: { Standard, DomainFilter, AssetFilter, ApproachFilter },
@@ -58,11 +59,12 @@ export default {
       variables() {
         return {
           search: this.search,
+          taxArray: this.taxArray
         }
       },
       debounce: 500,
       result (results) {
-        this.$store.dispatch('setStandards', results.data.standards.edges)
+        this.$store.dispatch('setStandards', results?.data?.standards?.edges)
       }
     },
   },
@@ -73,7 +75,53 @@ export default {
   },
   computed: {
     activeDomainsArray() {
-      return this.$store.state.filters.domainFilters.map(String)
+      return this.$store.state.filters.domainFilters
+    },
+    activeAssetsArray() {
+      return this.$store.state.filters.assetFilters
+    },
+    activeApproachesArray() {
+      return this.$store.state.filters.approachFilters
+    },
+    taxArray () {
+      
+      let taxonomyArray = [];
+      
+      let domainFilterObject = {
+        field: "TAXONOMY_ID",
+        includeChildren: true,
+        taxonomy: "DOMAIN",
+        operator: "IN",
+        terms: this.activeDomainsArray
+      }
+      let assetFilterObject = {
+        field: "TAXONOMY_ID",
+        includeChildren: true,
+        taxonomy: "ASSET",
+        operator: "IN",
+        terms: this.activeAssetsArray
+      }
+      let approachFilterObject = {
+        field: "TAXONOMY_ID",
+        includeChildren: true,
+        taxonomy: "APPROACH",
+        operator: "IN",
+        terms: this.activeApproachesArray
+      }
+
+      if (domainFilterObject.term) {
+        taxonomyArray.push(domainFilterObject)
+      }
+
+      if (assetFilterObject.term) {
+        taxonomyArray.push(assetFilterObject)
+      }
+
+      if (approachFilterObject.term) {
+        taxonomyArray.push(approachFilterObject)
+      }
+
+      return taxonomyArray;
     }
   }
 }
