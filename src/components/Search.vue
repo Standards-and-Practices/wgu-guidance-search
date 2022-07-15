@@ -25,7 +25,12 @@ import DomainFilter from './DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
 import queries from '../queries.js';
-import { TaxonomyEnum, RootQueryToStandardConnectionWhereArgsTaxQueryField, RootQueryToStandardConnectionWhereArgsTaxQueryOperator} from '../generated/graphql';
+import { 
+  TaxonomyEnum, 
+  RootQueryToStandardConnectionWhereArgsTaxQuery,
+  RootQueryToStandardConnectionWhereArgsTaxQueryField, 
+  RootQueryToStandardConnectionWhereArgsTaxQueryOperator
+} from '../generated/graphql.ts';
 
 export default {
   name: 'Search',
@@ -89,20 +94,18 @@ export default {
     activeApproachesArray() {
       return this.$store.state.filters.approachFilters
     },
-    taxArray () {
+    taxQuery () {
+      let taxArray = new RootQueryToStandardConnectionWhereArgsTaxQuery()
       
-      let taxArray = []
-      
+      let domainFilterArray = {
+        field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+        includeChildren: true,
+        operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+        taxonomy: TaxonomyEnum.Domain,
+        terms: this.activeDomainsArray.map(String),
+      };
 
-        let domainFilterArray = {
-          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
-          includeChildren: true,
-          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
-          taxonomy: TaxonomyEnum.Domain,
-          terms: this.activeDomainsArray.map(String),
-        };
-
-        taxArray.push(domainFilterArray)
+      taxArray.push(domainFilterArray)
 
       // if(this.activeAssetsArray) {
       //   let assetFilterObject = new RootQueryToStandardConnectionWhereArgsTaxQuery();
