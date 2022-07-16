@@ -144,7 +144,7 @@ export default {
       }
 
       let taxQuery: RootQueryToStandardConnectionWhereArgsTaxQuery = {
-        relation: RelationEnum.And,
+        relation: RelationEnum.Or,
         taxArray: taxArray,
       }
 
