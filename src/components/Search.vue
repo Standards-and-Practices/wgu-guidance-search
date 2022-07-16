@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div v-if="$apollo.loading">Loading...</div>
     <DomainFilter />
     <div class="w-1/2 my-8 mx-auto">
       <input v-model="search" type="search" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
@@ -11,27 +10,31 @@
       <AssetFilter />
       <ApproachFilter />
     </div>
-    <div class="w-2/3 flex-col" v-if="standards?.edges">
-      <Standard :standard="standard.node" v-for="(standard, index) in standards.edges" :key="standard.id" />
+    <div class="w-2/3 flex-col">
+      <div v-if="$apollo.loading">Loading...</div>
+      <div v-if="standards?.edges">
+        <Standard :standard="standard.node" v-for="(standard, index) in standards.edges" :key="standard.id" />
+      </div>
     </div>
 
   </div>
 </template>
 
 <script lang="ts">
-// import {debounce} from 'lodash-es'
 import Standard from './Standard.vue'
 import DomainFilter from './DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
 import queries from '../queries.js';
-import { 
+import {
   TaxonomyEnum,
   RelationEnum,
-  RootQueryToStandardConnectionWhereArgsTaxQueryField, 
+  RootQueryStandardsArgs,
+  RootQueryToStandardConnectionWhereArgsTaxQueryField,
   RootQueryToStandardConnectionWhereArgsTaxQueryOperator
 } from '../generated/graphql';
-import type { RootQueryToStandardConnectionWhereArgsTaxArray, RootQueryToStandardConnectionWhereArgsTaxQuery } from '../generated/graphql';
+
+import type { RootQueryToStandardConnectionWhereArgs, RootQueryToStandardConnectionWhereArgsTaxArray, RootQueryToStandardConnectionWhereArgsTaxQuery } from '../generated/graphql';
 
 export default {
   name: 'Search',
@@ -44,93 +47,113 @@ export default {
   apollo: {
     approaches: {
       query: queries.getApproaches,
-      result (results) {
+      result(results: { data: { approaches: { edges: any; }; }; }) {
         this.$store.dispatch('setApproaches', results.data.approaches.edges)
       }
     },
     assets: {
       query: queries.getAssets,
-      result (results) {
+      result(results: { data: { assets: { edges: any; }; }; }) {
         this.$store.dispatch('setAssets', results.data.assets.edges)
       }
     },
     domains: {
       query: queries.getDomains,
-      result (results) {
+      result(results: { data: { domains: { edges: any; }; }; }) {
         this.$store.dispatch('setDomains', results.data.domains.edges)
       }
     },
     standards: {
       query: queries.getStandards,
       variables() {
-
-        let queryVars = {
-          search: this.search,
-          // taxArray: [],
+        return {
+          first: 100,
+          where: this.where,
         }
-
-        // if (this.activeDomainsArray) {
-        //   queryVars.taxArray = this.taxArray
-        // }
-        return queryVars
       },
       debounce: 500,
-      result (results) {
+      result(results) {
         this.$store.dispatch('setStandards', results?.data?.standards?.edges)
       }
     },
   },
   mounted() {
-  
     if (globalThis.search) {
       this.search = globalThis.search;
     }
   },
   computed: {
+    filters() {
+      return this.$store.state.filters
+    },
     activeDomainsArray() {
-      return this.$store.state.filters.domainFilters
+
+      let activeDomains: string[] = []
+      if (this.filters.domainFilters) {
+        activeDomains = this.filters.domainFilters.map(String)
+      }
+      return activeDomains;
+
     },
     activeAssetsArray() {
-      return this.$store.state.filters.assetFilters
+
+      let activeAssets: string[] = []
+      if (this.filters.assetFilters) {
+        activeAssets = this.filters.assetFilters.map(String)
+      }
+      return activeAssets;
+
     },
     activeApproachesArray() {
-      return this.$store.state.filters.approachFilters
-    },
-    taxQuery () {
-       
-      let domainFilterArray:RootQueryToStandardConnectionWhereArgsTaxArray = {
-        field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
-        includeChildren: true,
-        operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
-        taxonomy: TaxonomyEnum.Domain,
-        terms: this.activeDomainsArray.map(String),
-      };
 
-      let taxQuery:RootQueryToStandardConnectionWhereArgsTaxQuery = {
+      let activeApproaches: string[] = []
+      if (this.filters.approachesFilters) {
+        activeApproaches = this.filters.approachesFilters.map(String)
+      }
+      return activeApproaches;
+
+    },
+    where() {
+      let taxArray: RootQueryToStandardConnectionWhereArgsTaxArray[] = []
+
+      this.activeApproachesArray.forEach(approach => {
+        taxArray.push({
+          terms: [approach],
+          taxonomy: TaxonomyEnum.Approach,
+          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+        })
+      })
+
+      this.activeAssetsArray.forEach(asset => {
+        taxArray.push({
+          terms: [asset],
+          taxonomy: TaxonomyEnum.Asset,
+          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+        })
+      })
+
+      this.activeDomainsArray.forEach(domain => {
+        taxArray.push({
+          terms: [domain],
+          taxonomy: TaxonomyEnum.Domain,
+          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+        })
+      })
+
+      let taxQuery: RootQueryToStandardConnectionWhereArgsTaxQuery = {
         relation: RelationEnum.Or,
-        taxArray: [domainFilterArray] 
-      };
-      
-      // if(this.activeAssetsArray) {
-      //   let assetFilterObject = new RootQueryToStandardConnectionWhereArgsTaxQuery();
-      //   assetFilterObject.field = RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId
-      //   assetFilterObject.includeChildren = true
-      //   assetFilterObject.taxonomy = 'ASSET'
-      //   assetFilterObject.operator = RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In
-      //   assetFilterObject.terms = this.activeAssetsArray
-      //   taxonomyArray.push(assetFilterObject)
-      // }
-      // if(this.activeApproachesArray) {
-      //   let approachFilterObject  = new RootQueryToStandardConnectionWhereArgsTaxQuery();
-      //   approachFilterObject.field = RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId
-      //   approachFilterObject.includeChildren = true
-      //   approachFilterObject.taxonomy = 'APPROACH'
-      //   approachFilterObject.operator = RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In
-      //   approachFilterObject.terms = this.activeApproachesArray
-      //   taxonomyArray.push(approachFilterObject)
-      // }
-      console.log(taxQuery)
-      return taxQuery;
+        taxArray: taxArray,
+      }
+
+      let whereQuery: RootQueryToStandardConnectionWhereArgs = {
+        search: this.search,
+        taxQuery: taxQuery
+      }
+
+      return whereQuery;
     }
   }
 }

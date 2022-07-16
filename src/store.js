@@ -54,18 +54,20 @@ const store = createStore({
       },
     },
     actions: {
+
         setStandards (context,standards) {
             context.commit('setStandards', standards);
         },
         setAssets (context,assets) {
             context.commit('setAssets', assets);
         },
-        setApproaches (context,Approaches) {
-            context.commit('setApproaches', Approaches);
+        setApproaches (context, approaches) {
+            context.commit('setApproaches', approaches);
         },
-        setDomains (context,Domains) {
-            context.commit('setDomains', Domains);
+        setDomains (context, domains) {
+            context.commit('setDomains', domains);
         },
+
         addAssetFilters (context, assetFilter) {
             context.commit('addAssetFilter', assetFilter);
         },
@@ -75,9 +77,17 @@ const store = createStore({
         addDomainFilter (context, domainFilter) {
           context.commit('addDomainFilter', domainFilter);
         },
+
+        removeAssetFilter (context, assetFilter) {
+          context.commit('removAssetFilter', assetFilter);
+        },
+        removeApproachFilter (context, approachFilter) {
+          context.commit('removeApproachFilter', approachFilter);
+        },
         removeDomainFilter (context, domainFilter) {
           context.commit('removeDomainFilter', domainFilter);
         }
+
     },
   })
  

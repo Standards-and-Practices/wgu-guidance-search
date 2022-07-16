@@ -22,26 +22,26 @@
  * GitHub Plugin URI: Standards-and-Practices/wgu-guidance-search
 */
 
-// function wgu_guidance_scripts($hook)
-// {
+function wgu_guidance_scripts($hook)
+{
 
-//     foreach( glob( get_template_directory(). '/dist/assets/*.js' ) as $file ) {
-//         // $file contains the name and extension of the file
-//         wp_enqueue_script( $file, get_template_directory_uri().'/path/'.$file);
-//     }
-
-
-// }
-// add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
-
-// function wgu_guidance_styles($hook)
-// {
-
-//     foreach( glob( get_template_directory(). '/dist/assets/*.css' ) as $file ) {
-//         // $file contains the name and extension of the file
-//         wp_enqueue_style( $file, get_template_directory_uri().'/path/'.$file);
-//     }
+    foreach( glob( get_template_directory(). '/dist/assets/*.js' ) as $file ) {
+        // $file contains the name and extension of the file
+        wp_enqueue_script( $file, get_template_directory_uri().'/path/'.$file);
+    }
 
 
-// }
-// add_action('wp_enqueue_styles', 'wgu_guidance_styles');
+}
+add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
+
+function wgu_guidance_styles($hook)
+{
+
+    foreach( glob( get_template_directory(). '/dist/assets/*.css' ) as $file ) {
+        // $file contains the name and extension of the file
+        wp_enqueue_style( $file, get_template_directory_uri().'/path/'.$file);
+    }
+
+
+}
+add_action('wp_enqueue_styles', 'wgu_guidance_styles');
