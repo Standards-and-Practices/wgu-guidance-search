@@ -116,7 +116,7 @@ export default {
     where() {
       let taxArray: RootQueryToStandardConnectionWhereArgsTaxArray[] = []
 
-      if(this.activeApproachesArray) {
+      if(this.activeApproachesArray.length) {
         taxArray.push({
           terms: this.activeApproachesArray,
           taxonomy: TaxonomyEnum.Approach,
@@ -125,7 +125,7 @@ export default {
         })
       }
 
-      if(this.activeAssetsArray) {
+      if(this.activeAssetsArray.length) {
         taxArray.push({
           terms: this.activeAssetsArray,
           taxonomy: TaxonomyEnum.Asset,
@@ -133,8 +133,8 @@ export default {
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
       }
-
-      if(this.activeDomainsArray) {
+      console.log(this.activeDomainsArray)
+      if(this.activeDomainsArray.length) {
         taxArray.push({
           terms: this.activeDomainsArray,
           taxonomy: TaxonomyEnum.Domain,
