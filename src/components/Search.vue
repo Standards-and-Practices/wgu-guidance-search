@@ -116,32 +116,32 @@ export default {
     where() {
       let taxArray: RootQueryToStandardConnectionWhereArgsTaxArray[] = []
 
-      this.activeApproachesArray.forEach(approach => {
+      if(this.activeApproachesArray) {
         taxArray.push({
-          terms: [approach],
+          terms: this.activeApproachesArray,
           taxonomy: TaxonomyEnum.Approach,
           operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
-      })
+      }
 
-      this.activeAssetsArray.forEach(asset => {
+      if(this.activeAssetsArray) {
         taxArray.push({
-          terms: [asset],
+          terms: this.activeAssetsArray,
           taxonomy: TaxonomyEnum.Asset,
           operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
-      })
+      }
 
-      this.activeDomainsArray.forEach(domain => {
+      if(this.activeDomainsArray) {
         taxArray.push({
-          terms: [domain],
+          terms: this.activeDomainsArray,
           taxonomy: TaxonomyEnum.Domain,
           operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
-      })
+      }
 
       let taxQuery: RootQueryToStandardConnectionWhereArgsTaxQuery = {
         relation: RelationEnum.Or,
