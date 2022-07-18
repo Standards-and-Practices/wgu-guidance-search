@@ -57,7 +57,7 @@ export default {
 .standard {
     @apply w-full pb-8;
     height: auto;
-    min-height: 170px;
+    min-height: 100px;
 }
 .principle-name {
     @apply uppercase font-bold text-center text-xs;

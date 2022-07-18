@@ -2,8 +2,8 @@
     <div class="mb-5">
         <div class="filter-title">Assets</div>
         <ul>
-            <li v-for="asset in assets" :key="asset.node.id">
-                <Checkbox @click="toggleAssetFilter(asset.node.id)" :label="label(asset.node.name, asset.node.count)" />
+            <li v-for="asset in assets" :key="asset.node.databaseId">
+                <Checkbox @click="toggleAssetFilter(asset.node.databaseId)" :label="label(asset.node.name, asset.node.count)" />
             </li>
         </ul>
     </div>
@@ -17,10 +17,22 @@ export default {
         assets() {
             return this.$store.state.assets;
         },
+        currentAssetFilters() {
+            return this.$store.state.filters.assetsFilters ? this.$store.state.filters.assetsFilters : [];
+        }
     },
     methods: {
         toggleAssetFilter(assetFilter) {
-            this.$store.dispatch('addAssetFilters', assetFilter)
+            console.log("Includes: ", this.currentAssetFilters.includes(assetFilter));
+
+            if (!this.currentAssetFilters.includes(assetFilter)) {
+                this.$store.dispatch('removeAssetFilter', assetFilter)
+                console.log('Remove' ,assetFilter);
+            } else {
+                this.$store.dispatch('addAssetFilter', assetFilter)
+                console.log('Add', assetFilter)
+            }
+
         },
         label(name, count) {
             const filterCount = count ? count : '0';

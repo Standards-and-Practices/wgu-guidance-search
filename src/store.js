@@ -28,7 +28,7 @@ const store = createStore({
       setStandards (state, standards) {
         state.standards = standards;
       },
-      addAssetFilter (state, assetFilter) {
+      addAssetFilter (state, assetFilter) {``
         if(!state.filters.assetsFilters.includes(assetFilter)) {
           state.filters.assetsFilters.push(assetFilter);
         }
@@ -43,14 +43,14 @@ const store = createStore({
           state.filters.approachFilters.push(approachFilter);
         }
       },
-      removeAssetFilters (state, assetFilter) {
-        state.filters.assetsFilters =  state.filters.assetsFilters.splice (filter => { return filter !== assetFilter });
+      removeAssetFilter (state, assetFilter) {
+        state.filters.assetsFilters.splice(state.filters.assetsFilters.indexOf(assetFilter), 1);
       },
       removeDomainFilter (state, domainFilter) {
-        state.filters.domainFilters =  state.filters.domainFilters.filter(filter => { return filter !== domainFilter });
+        state.filters.domainFilters.splice(state.filters.assetsFilters.indexOf(domainFilter,1));
       },
-      removeApproachFilters (state, approachFilter) {
-        state.filters.approachFilters =  state.filters.approachFilters.filter(filter => { return filter !== approachFilter });
+      removeApproachFilter (state, approachFilter) {
+        state.filters.approachFilters.splice(state.filters.assetsFilters.indexOf(approachFilter), 1);
       },
     },
     actions: {
@@ -68,7 +68,7 @@ const store = createStore({
             context.commit('setDomains', domains);
         },
 
-        addAssetFilters (context, assetFilter) {
+        addAssetFilter (context, assetFilter) {
             context.commit('addAssetFilter', assetFilter);
         },
         addApproachFilter (context, approachFilter) {
@@ -79,7 +79,7 @@ const store = createStore({
         },
 
         removeAssetFilter (context, assetFilter) {
-          context.commit('removAssetFilter', assetFilter);
+          context.commit('removeAssetFilter', assetFilter);
         },
         removeApproachFilter (context, approachFilter) {
           context.commit('removeApproachFilter', approachFilter);

@@ -2,7 +2,12 @@
   <div>
     <DomainFilter />
     <div class="w-1/2 my-8 mx-auto">
-      <input v-model="search" type="search" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
+      <input 
+        v-model="search" 
+        type="search" 
+        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" 
+        placeholder="Search Standards & Guidance"
+        />
     </div>
   </div>
   <div class="container flex">
