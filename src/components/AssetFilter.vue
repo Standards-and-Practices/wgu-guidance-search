@@ -10,6 +10,7 @@
                     v-if="asset.node.count"
                 />
             </li>
+            <li @click="showAll" v-if="assetFilters.length">Show All</li>
         </ul>
     </div>
 </template>
@@ -41,6 +42,9 @@ export default {
         },
         isActive(asset) {
             return this.assetFilters.includes(asset)
+        },
+        showAll(){
+            this.$store.dispatch('clearAssetFilters')
         }
     },
     computed: {

@@ -62,13 +62,23 @@ const store = createStore({
         }
       },
       removeAssetFilter (state, filter) {
-        state.filters.assets.splice(state.filters.assets.indexOf(filter), 1);
+        state.filters.assets = state.filters.assets.filter(o => { return o !== filter });
       },
       removeDomainFilter (state, filter) {
-        state.filters.domains.splice(state.filters.assets.indexOf(filter,1));
+        state.filters.domains = state.filters.domains.filter(o => { return o !== filter });
       },
       removeApproachFilter (state, filter) {
-        state.filters.approaches.splice(state.filters.assets.indexOf(filter), 1);
+        state.filters.approaches = state.filters.approaches.filter(o => { return o !== filter });
+      },
+
+      clearAssetFilters(state) {
+        state.filters.assets = [];
+      },
+      clearApproachFilters(state) {
+        state.filters.approaches = [];
+      },
+      clearDomainFilters(state) {
+        state.filters.domains = [];
       },
     },
     actions: {
@@ -114,7 +124,18 @@ const store = createStore({
         },
         removeDomainFilter (context, filter) {
           context.commit('removeDomainFilter', filter);
-        }
+        },
+
+        clearAssetFilters(context) {
+          context.commit('clearAssetFilters');
+        },
+        clearApproachFilters(context) {
+          context.commit('clearApproachFilters');
+        },
+        clearDomainFilters(context) {
+          context.commit('clearDomainFilters');
+        },
+
 
     },
   })

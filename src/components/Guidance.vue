@@ -19,6 +19,7 @@ import DoDontImage from "./examples/do-dont-image.vue"
 import DoDontText from "./examples/do-dont-text.vue"
 import Media from "./examples/media.vue"
 import Text from "./examples/text.vue"
+import InfoBlock from "./examples/info-block.vue"
 
 export default {
     name: "Guidance",
@@ -44,6 +45,9 @@ export default {
                     break;
                 case 'Standard_Guidance_guidance_GuidanceExamples_Text':
                     return Text
+                    break;
+                case 'Standard_Guidance_guidance_GuidanceExamples_InfoBlock':
+                    return InfoBlock
                     break;
                 default:
                     return Text;

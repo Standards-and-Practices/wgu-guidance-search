@@ -17,7 +17,7 @@
     </div>
     <div class="w-2/3 flex-col">
 
-      <div class="border-2 border-red-600 rounded hidden">
+      <div class="border-2 border-red-600 rounded ">
         
         {{ JSON.stringify(where) }}
         
@@ -46,12 +46,11 @@ import queries from '../queries.js';
 import {
   TaxonomyEnum,
   RelationEnum,
-  RootQueryStandardsArgs,
+
   RootQueryToStandardConnectionWhereArgsTaxQueryField,
   RootQueryToStandardConnectionWhereArgsTaxQueryOperator
 } from '../generated/graphql';
 
-import store  from '../store'
 import type { RootQueryToStandardConnectionWhereArgs, RootQueryToStandardConnectionWhereArgsTaxArray, RootQueryToStandardConnectionWhereArgsTaxQuery } from '../generated/graphql';
 
 export default {
@@ -65,20 +64,28 @@ export default {
   apollo: {
     approaches: {
       query: queries.getApproaches,
-      result(results: { data: { approaches: { edges: any; }; }; }) {
+      result(results) {
         this.$store.dispatch('setApproaches', results.data.approaches.edges)
       }
     },
     assets: {
       query: queries.getAssets,
-      result(results: { data: { assets: { edges: any; }; }; }) {
+      result(results) {
         this.$store.dispatch('setAssets', results.data.assets.edges)
       }
     },
     domains: {
       query: queries.getDomains,
-      result(results: { data: { domains: { edges: any; }; }; }) {
-        this.$store.dispatch('setDomains', results.data.domains.edges)
+      result(results) {
+
+        let raw = results.data.domains.edges
+        let polished = [];
+
+        raw.forEach(domain => {
+           polished.push(domain.node);
+        })
+
+        this.$store.dispatch('setDomains', polished)
       }
     },
     standards: {
@@ -89,8 +96,9 @@ export default {
           where: this.where,
         }
       },
-      debounce: 500,
+      debounce: 750,
       result(results) {
+
         this.$store.dispatch('setStandards', results?.data?.standards?.edges)
       }
     },
@@ -107,11 +115,7 @@ export default {
     },
     activeDomainsArray() {
 
-      let activeDomains: string[] = []
-      if (this.filters.domains) {
-        activeDomains = this.filters.domains.map(object => object['databaseId']).map(String)
-      }
-      return activeDomains;
+      return this.filters.domains;
 
     },
     activeAssetsArray() {
@@ -163,7 +167,7 @@ export default {
       }
 
       let taxQuery: RootQueryToStandardConnectionWhereArgsTaxQuery = {
-        relation: RelationEnum.Or,
+        relation: RelationEnum.And,
         taxArray: taxArray,
       }
 

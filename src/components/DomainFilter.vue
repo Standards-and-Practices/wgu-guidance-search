@@ -1,9 +1,9 @@
 <template>
 	<div class="flex gap-2 flex-row justify-center my-4">
 
-		<div class="flex-column" v-for="domain in domains" :key="domain.node.filter" @click="toggle(domain.node)">
-			<img class="w-30 mx-auto mb-2" :src="isActive(domain.node) ? domain.node.displaySettings.activeIcon.sourceUrl : domain.node.displaySettings.inactiveIcon.sourceUrl" />
-			<p class="domain-name" :style="{ color: domain?.node?.displaySettings?.color }" >{{ domain.node.name }}</p>
+		<div class="flex-column" v-for="domain in domains" :key="domain.filter" @click="toggle(domain)">
+			<img class="w-30 mx-auto mb-2" :src="isActive(domain.databaseId) ? domain.displaySettings.activeIcon.sourceUrl : domain.displaySettings.inactiveIcon.sourceUrl" />
+			<p class="domain-name" :style="{ color: domain?.displaySettings?.color }" >{{ domain.name }}</p>
 		</div>
 
 		<div class="flex-column" >
@@ -33,49 +33,33 @@
 			};
 		},
 		mounted() {
-			if (localStorage.domains) {
-				this.init();
-			} else {
-				this.showAll();
-			}
+
 		},
 		methods: {
-			persist() {
-				this.$forceUpdate();
-				localStorage.domains = JSON.stringify(this.domainFilters);
-			},
-			init() {
-				if (localStorage.domains === 'undefined'|| localStorage.domains === undefined) {
-					this.showAll()
-				} else {
-					const activeDomainFilters = JSON.parse(localStorage.domains)
-					activeDomainFilters.forEach(domain => this.show( domain) )
-				}
-			},
-			async toggle(filter) {
-				this.isActive(filter) ? this.hide(filter) : this.show(filter)
+			toggle(filter) {
+				this.isActive(filter.databaseId) ? this.hide(filter.databaseId) : this.show(filter.databaseId);
 			},
 			show(filter) {
-				this.$store.dispatch('addDomainFilter', filter)	
-				this.persist()			
+				console.log(`Showing ${filter}`, filter)
+				this.$store.dispatch('addDomainFilter', String(filter))	
 			},
 			hide(filter) {
-				this.$store.dispatch('removeDomainFilter', filter)
-				this.persist()	
+				console.log(`Hiding ${filter}`, filter)
+				this.$store.dispatch('removeDomainFilter', String(filter))
 			},
 			showAll() {
-				this.domains.forEach(domain => { this.show( domain.node ) });
+				this.domains.forEach(domain => { this.show( domain.databaseId ) });
 			},
 			hideAll() {
-				this.domains.forEach(domain => { this.hide( domain.node ) });
+				this.domains.forEach(domain => { this.hide( domain.databaseId ) });
 			},
-			isActive(filter) {
-				return this.domainFilters.includes(filter);
+			isActive(databaseId) {
+				return this.domainFilters.includes(String(databaseId));
 			},
 		},
 		computed: {
 			domains() {
-				return this.$store.state.domains.map(Object)
+				return this.$store.state.domains
 			},
 			domainFilters() {
 				return this.$store.state.filters.domains

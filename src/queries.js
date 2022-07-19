@@ -97,35 +97,38 @@ const getStandards = gql`
 							guidanceDetails
 							guidanceRationale
 							guidanceExamples {
-    __typename
-    ... on Standard_Guidance_guidance_GuidanceExamples_DoDontText {
-      doDescription
-      doText
-      dontDescription
-      dontText
-    }
-    ... on Standard_Guidance_guidance_GuidanceExamples_DoDontImage {
-      doCaption
-      doImage {
-        sourceUrl
-      }
-      dontCaption
-      dontImage{
-        sourceUrl
-      }
-    }
-    ... on Standard_Guidance_guidance_GuidanceExamples_Text {
-      text
-    }
-    ... on Standard_Guidance_guidance_GuidanceExamples_Media {
-      file{
-        sourceUrl
-      }
-    }
-    ... on Standard_Guidance_guidance_GuidanceExamples_Code{
-      code
-    }
-  }
+								__typename
+								... on Standard_Guidance_guidance_GuidanceExamples_DoDontText {
+									doDescription
+									doText
+									dontDescription
+									dontText
+								}
+								... on Standard_Guidance_guidance_GuidanceExamples_DoDontImage {
+									doCaption
+									doImage {
+										sourceUrl
+									}
+									dontCaption
+									dontImage {
+										sourceUrl
+									}
+								}
+								... on Standard_Guidance_guidance_GuidanceExamples_Text {
+									text
+								}
+								... on Standard_Guidance_guidance_GuidanceExamples_Media {
+									file {
+										sourceUrl
+									}
+								}
+								... on Standard_Guidance_guidance_GuidanceExamples_Code {
+									code
+								}
+								... on Standard_Guidance_guidance_GuidanceExamples_InfoBlock {
+									text
+								}
+							}
 						}
 					}
 				}

@@ -9,6 +9,7 @@
                     :label="label(approach.node.name, approach.node.count)" 
                     v-if="approach.node.count" />
             </li>
+            <li @click="showAll" v-if="approachFilters.length">Show All</li>
         </ul>
     </div>
 </template>
@@ -48,6 +49,9 @@ export default {
         },
         isActive(approach) {
             return this.approachFilters.includes(approach)
+        },
+        showAll(){
+            this.$store.dispatch('clearAssetFilters')
         }
     },
     components: { Checkbox }
