@@ -17,12 +17,6 @@
     </div>
     <div class="w-2/3 flex-col">
 
-      <div class="border-2 border-red-600 rounded hidden">
-        
-        {{ JSON.stringify(where) }}
-        
-      </div>
-
       <div v-if="$apollo.loading">Loading...</div>
       <div v-if="standards?.edges.length">
         <Standard :standard="standard.node" v-for="(standard, index) in standards.edges" :key="standard.id" />
