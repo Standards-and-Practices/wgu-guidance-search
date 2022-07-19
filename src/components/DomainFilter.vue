@@ -1,8 +1,8 @@
 <template>
 	<div class="flex gap-2 flex-row justify-center my-4">
 
-		<div class="flex-column" v-for="domain in domains" :key="domain.node.class" @click="toggle(domain.node.databaseId)">
-			<img class="w-30 mx-auto mb-2" :src="isActive(domain.node.databaseId) ? domain.node.displaySettings.activeIcon.sourceUrl : domain.node.displaySettings.inactiveIcon.sourceUrl" />
+		<div class="flex-column" v-for="domain in domains" :key="domain.node.filter" @click="toggle(domain.node)">
+			<img class="w-30 mx-auto mb-2" :src="isActive(domain.node) ? domain.node.displaySettings.activeIcon.sourceUrl : domain.node.displaySettings.inactiveIcon.sourceUrl" />
 			<p class="domain-name" :style="{ color: domain?.node?.displaySettings?.color }" >{{ domain.node.name }}</p>
 		</div>
 
@@ -32,49 +32,33 @@
 				none: icons.none,
 			};
 		},
-		mounted() {
-			if (localStorage.domains) {
-				this.retrieve();
-			} else {
-				this.showAll();
-			}
-		},
+		mounted() {},
 		methods: {
-			persist() {
-				this.$forceUpdate();
-				localStorage.domains = JSON.stringify(this.activeDomainFilters);
+			async toggle(filter) {
+				this.isActive(filter) ? this.hide(filter) : this.show(filter)
 			},
-			retrieve() {
-				const activeDomainFilters = JSON.parse(localStorage.domains);
-				activeDomainFilters.forEach(domain => this.show( domain) );
+			show(filter) {
+				this.$store.dispatch('addDomainFilter', filter)				
 			},
-			async toggle(databaseId) {
-				this.isActive(databaseId) ? this.hide(databaseId) : this.show(databaseId)
-			},
-			show(databaseId) {
-				this.$store.dispatch('addDomainFilter', databaseId)	
-				this.persist()			
-			},
-			hide(databaseId) {
-				this.$store.dispatch('removeDomainFilter', databaseId)
-				this.persist()
+			hide(filter) {
+				this.$store.dispatch('removeDomainFilter', filter)
 			},
 			showAll() {
-				this.domains.forEach(domain => { this.show( domain.node.databaseId ) });
+				this.domains.forEach(domain => { this.show( domain.node ) });
 			},
 			hideAll() {
-				this.domains.forEach(domain => { this.hide( domain.node.databaseId ) });
+				this.domains.forEach(domain => { this.hide( domain.node ) });
 			},
-			isActive(databaseId) {
-				return this.activeDomainFilters.includes(databaseId);
+			isActive(filter) {
+				return this.domainFilters.includes(filter);
 			},
 		},
 		computed: {
 			domains() {
 				return this.$store.state.domains;
 			},
-			activeDomainFilters() {
-				return this.$store.state.filters.domainFilters
+			domainFilters() {
+				return this.$store.state.filters.domains
 			},
 		}
 	};

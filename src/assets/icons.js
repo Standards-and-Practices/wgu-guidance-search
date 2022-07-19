@@ -4,6 +4,7 @@ import all from './all.svg';
 import answerMark from './answer-mark.svg';
 import assessmentInactive from './assessment-inactive.svg';
 import assessment from './assessment.svg';
+import checked from './checked.svg'; 
 import comments from './comments.svg';
 import deselect from './deselect.png';
 import diversityEquityInclusionInactive from './diversity-equity-inclusion-inactive.svg';
@@ -23,6 +24,7 @@ import select from './select.png';
 import socialEmotionalLearningInactive from './social-emotional-learning-inactive.svg';
 import socialEmotionalLearning from './social-emotional-learning.svg';
 import tag from './tag.svg';
+import unchecked from './unchecked.svg';
 import visualDesignInactive from './visual-design-inactive.svg';
 import visualDesign from './visual-design.svg';
 
@@ -33,8 +35,8 @@ const icons = {
 	answerMark,
 	assessmentInactive,
 	assessment,
+	checked,
 	comments,
-	deselect,
 	diversityEquityInclusionInactive,
 	diversityEquityInclusion,
 	instructionalDesignInactive,
@@ -52,6 +54,7 @@ const icons = {
 	socialEmotionalLearningInactive,
 	socialEmotionalLearning,
 	tag,
+	unchecked,
 	visualDesignInactive,
 	visualDesign,
 };

@@ -1,16 +1,23 @@
 import { createStore } from 'vuex'
+import VuexPersistence from 'vuex-persist'
+
+// Vuex Persistence
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 // Create a new store instance.
 const store = createStore({
+    plugins: [vuexLocal.plugin],
     state () {
       return {
         assets: [],
         approaches: [],
         domains: [],
         filters: {
-            domainFilters: [],
-            assetsFilters: [],
-            approachFilters: [],
+            domains: [],
+            assets: [],
+            approaches: [],
         },
         standards: [], 
       }
@@ -28,29 +35,40 @@ const store = createStore({
       setStandards (state, standards) {
         state.standards = standards;
       },
-      addAssetFilter (state, assetFilter) {``
-        if(!state.filters.assetsFilters.includes(assetFilter)) {
-          state.filters.assetsFilters.push(assetFilter);
+      
+      setAssetFilters (state, assetFilters) {
+        state.filters.assets = assetFilters;
+      },
+      setApproachFilters (state, approachFilters) {
+        state.filters.approaches = approachFilters;
+      },
+      setDomainFilters (state, domainFilters) {
+        state.filters.domains = domainFilters;
+      },
+
+      addAssetFilter (state, filter) {
+        if(!state.filters.assets.includes(filter)) {
+          state.filters.assets.push(filter);
         }
       },
-      addDomainFilter (state, domainFilter) {
-        if(!state.filters.domainFilters.includes(domainFilter)) {
-          state.filters.domainFilters.push(domainFilter);
+      addDomainFilter (state, filter) {
+        if(!state.filters.domains.includes(filter)) {
+          state.filters.domains.push(filter);
         }
       },
-      addApproachFilter (state, approachFilter) {
-        if(!state.filters.approachFilters.includes(approachFilter)) {
-          state.filters.approachFilters.push(approachFilter);
+      addApproachFilter (state, filter) {
+        if(!state.filters.approaches.includes(filter)) {
+          state.filters.approaches.push(filter);
         }
       },
-      removeAssetFilter (state, assetFilter) {
-        state.filters.assetsFilters.splice(state.filters.assetsFilters.indexOf(assetFilter), 1);
+      removeAssetFilter (state, filter) {
+        state.filters.assets.splice(state.filters.assets.indexOf(filter), 1);
       },
-      removeDomainFilter (state, domainFilter) {
-        state.filters.domainFilters.splice(state.filters.assetsFilters.indexOf(domainFilter,1));
+      removeDomainFilter (state, filter) {
+        state.filters.domains.splice(state.filters.assets.indexOf(filter,1));
       },
-      removeApproachFilter (state, approachFilter) {
-        state.filters.approachFilters.splice(state.filters.assetsFilters.indexOf(approachFilter), 1);
+      removeApproachFilter (state, filter) {
+        state.filters.approaches.splice(state.filters.assets.indexOf(filter), 1);
       },
     },
     actions: {
@@ -68,24 +86,34 @@ const store = createStore({
             context.commit('setDomains', domains);
         },
 
-        addAssetFilter (context, assetFilter) {
-            context.commit('addAssetFilter', assetFilter);
+        setAssetFilters (context, assetFilters) {
+          context.commit('setAssetFilters', assetFilters);
         },
-        addApproachFilter (context, approachFilter) {
-            context.commit('addApproachFilter', approachFilter);
+        setApproachFilters (context, approachFilters) {
+          context.commit('setApproachFilters', approachFilters);
         },
-        addDomainFilter (context, domainFilter) {
-          context.commit('addDomainFilter', domainFilter);
+        setDomainFilters (context, domainFilters) {
+          context.commit('setDomainFilters', domainFilters);
         },
 
-        removeAssetFilter (context, assetFilter) {
-          context.commit('removeAssetFilter', assetFilter);
+        addAssetFilter (context, filter) {
+            context.commit('addAssetFilter', filter);
         },
-        removeApproachFilter (context, approachFilter) {
-          context.commit('removeApproachFilter', approachFilter);
+        addApproachFilter (context, filter) {
+            context.commit('addApproachFilter', filter);
         },
-        removeDomainFilter (context, domainFilter) {
-          context.commit('removeDomainFilter', domainFilter);
+        addDomainFilter (context, filter) {
+          context.commit('addDomainFilter', filter);
+        },
+
+        removeAssetFilter (context, filter) {
+          context.commit('removeAssetFilter', filter);
+        },
+        removeApproachFilter (context, filter) {
+          context.commit('removeApproachFilter', filter);
+        },
+        removeDomainFilter (context, filter) {
+          context.commit('removeDomainFilter', filter);
         }
 
     },

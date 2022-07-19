@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "isolatedModules": true,
-    "noEmit": true                           /* Skip type checking all .d.ts files. */
+    "noEmit": true,
+    "allowJs": true                        /* Skip type checking all .d.ts files. */
   }
 }

@@ -3,7 +3,11 @@
         <div class="filter-title">Approaches</div>
         <ul>
             <li v-for="approach in approaches" :key="approach.node.databaseId">
-                <Checkbox @click="toggleApproachFilter(approach.node.databaseId)" :label="label(approach.node.name, approach.node.count)" />
+                <Checkbox 
+                    @click="toggleApproachFilter(approach.node)" 
+                    :modelValue="isActive(approach.node)"
+                    :label="label(approach.node.name, approach.node.count)" 
+                    v-if="approach.node.count" />
             </li>
         </ul>
     </div>
@@ -16,18 +20,34 @@ export default {
     computed: {
         approaches() {
             return this.$store.state.approaches;
+        },
+        approachFilters() {
+            return this.$store.state.filters.approaches;
         }
     },
     methods: {
-
         toggleApproachFilter(approachFilter) {
 
-            this.$store.dispatch('addApproachFilter', approachFilter)
+            if (this.approachFilters.includes(approachFilter)) {
+
+                this.$store.dispatch('removeApproachFilter', approachFilter)
+                console.log('Remove', approachFilter);
+
+            } else {
+
+                this.$store.dispatch('addApproachFilter', approachFilter)
+                console.log('Add', approachFilter)
+
+            }
+
     
         },
         label(name, count) {
             const filterCount = count ? count : '0';
             return `${name} (${filterCount})`
+        },
+        isActive(approach) {
+            return this.approachFilters.includes(approach)
         }
     },
     components: { Checkbox }

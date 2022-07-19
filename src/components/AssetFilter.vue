@@ -2,8 +2,13 @@
     <div class="mb-5">
         <div class="filter-title">Assets</div>
         <ul>
-            <li v-for="asset in assets" :key="asset.node.databaseId">
-                <Checkbox @click="toggleAssetFilter(asset.node.databaseId)" :label="label(asset.node.name, asset.node.count)" />
+            <li v-for="asset in assets" :key="asset.node.databaseId" >
+                <Checkbox 
+                    @click="toggleAssetFilter(asset.node)" 
+                    :modelValue="isActive(asset.node)"
+                    :label="label(asset.node.name, asset.node.count)" 
+                    v-if="asset.node.count"
+                />
             </li>
         </ul>
     </div>
@@ -13,33 +18,39 @@
 import Checkbox from "./atoms/Checkbox.vue"
 export default {
     name: "AssetFilter",
-    computed: {
-        assets() {
-            return this.$store.state.assets;
-        },
-        currentAssetFilters() {
-            return this.$store.state.filters.assetsFilters ? this.$store.state.filters.assetsFilters : [];
-        }
-    },
+    components: { Checkbox },
     methods: {
         toggleAssetFilter(assetFilter) {
-            console.log("Includes: ", this.currentAssetFilters.includes(assetFilter));
 
-            if (!this.currentAssetFilters.includes(assetFilter)) {
+            if (this.assetFilters.includes(assetFilter)) {
+
                 this.$store.dispatch('removeAssetFilter', assetFilter)
-                console.log('Remove' ,assetFilter);
+                console.log('Remove', assetFilter);
+
             } else {
+
                 this.$store.dispatch('addAssetFilter', assetFilter)
                 console.log('Add', assetFilter)
+
             }
 
         },
         label(name, count) {
             const filterCount = count ? count : '0';
             return `${name} (${filterCount})`
+        },
+        isActive(asset) {
+            return this.assetFilters.includes(asset)
         }
     },
-    components: { Checkbox },
+    computed: {
+        assets() {
+            return this.$store.state.assets;
+        },
+        assetFilters() {
+            return this.$store.state.filters.assets;
+        }
+    },
 }
 </script>
 <style scoped>

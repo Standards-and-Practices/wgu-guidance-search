@@ -2,11 +2,11 @@
   <div>
     <DomainFilter />
     <div class="w-1/2 my-8 mx-auto">
-      <input 
-        v-model="search" 
-        type="search" 
-        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" 
-        placeholder="Search Standards & Guidance"
+        <SearchInput 
+          type="search" 
+          v-model="search" 
+          wrapperClass="searchWrapper" 
+          placeholder="Search Standards & Guidance"
         />
     </div>
   </div>
@@ -16,9 +16,19 @@
       <ApproachFilter />
     </div>
     <div class="w-2/3 flex-col">
+
+      <div class="border-2 border-red-600 rounded hidden">
+        
+        {{ JSON.stringify(where) }}
+        
+      </div>
+
       <div v-if="$apollo.loading">Loading...</div>
-      <div v-if="standards?.edges">
+      <div v-if="standards?.edges.length">
         <Standard :standard="standard.node" v-for="(standard, index) in standards.edges" :key="standard.id" />
+      </div>
+      <div v-if="!standards?.edges.length">
+        No results found.
       </div>
     </div>
 
@@ -30,6 +40,8 @@ import Standard from './Standard.vue'
 import DomainFilter from './DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
+import SearchInput from 'vue-search-input'
+import 'vue-search-input/dist/styles.css'
 import queries from '../queries.js';
 import {
   TaxonomyEnum,
@@ -39,11 +51,12 @@ import {
   RootQueryToStandardConnectionWhereArgsTaxQueryOperator
 } from '../generated/graphql';
 
+import store  from '../store'
 import type { RootQueryToStandardConnectionWhereArgs, RootQueryToStandardConnectionWhereArgsTaxArray, RootQueryToStandardConnectionWhereArgsTaxQuery } from '../generated/graphql';
 
 export default {
   name: 'Search',
-  components: { Standard, DomainFilter, AssetFilter, ApproachFilter },
+  components: { SearchInput, Standard, DomainFilter, AssetFilter, ApproachFilter },
   data() {
     return {
       search: '',
@@ -86,6 +99,7 @@ export default {
     if (globalThis.search) {
       this.search = globalThis.search;
     }
+
   },
   computed: {
     filters() {
@@ -94,8 +108,8 @@ export default {
     activeDomainsArray() {
 
       let activeDomains: string[] = []
-      if (this.filters.domainFilters) {
-        activeDomains = this.filters.domainFilters.map(String)
+      if (this.filters.domains) {
+        activeDomains = this.filters.domains.map(object => object['databaseId']).map(String)
       }
       return activeDomains;
 
@@ -103,8 +117,8 @@ export default {
     activeAssetsArray() {
 
       let activeAssets: string[] = []
-      if (this.filters.assetFilters) {
-        activeAssets = this.filters.assetFilters.map(String)
+      if (this.filters.assets) {
+        activeAssets = this.filters.assets.map(object => object['databaseId']).map(String)
       }
       return activeAssets;
 
@@ -112,8 +126,8 @@ export default {
     activeApproachesArray() {
 
       let activeApproaches: string[] = []
-      if (this.filters.approachesFilters) {
-        activeApproaches = this.filters.approachesFilters.map(String)
+      if (this.filters.approaches) {
+        activeApproaches = this.filters.approaches.map(object => object['databaseId']).map(String)
       }
       return activeApproaches;
 
@@ -138,7 +152,7 @@ export default {
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
       }
-      console.log(this.activeDomainsArray)
+
       if(this.activeDomainsArray.length) {
         taxArray.push({
           terms: this.activeDomainsArray,
@@ -160,6 +174,18 @@ export default {
 
       return whereQuery;
     }
-  }
+  },
+  methods: {
+
+  },
 }
 </script>
+
+<style type="text/css">
+.searchWrapper {
+  @apply shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;
+}
+.searchWrapper input {
+  @apply w-full;
+}
+</style>
