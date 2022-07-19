@@ -17,7 +17,7 @@
     </div>
     <div class="w-2/3 flex-col">
 
-      <div class="border-2 border-red-600 rounded ">
+      <div class="border-2 border-red-600 rounded hidden">
         
         {{ JSON.stringify(where) }}
         
