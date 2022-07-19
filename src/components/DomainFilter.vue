@@ -32,16 +32,36 @@
 				none: icons.none,
 			};
 		},
-		mounted() {},
+		mounted() {
+			if (localStorage.domains) {
+				this.init();
+			} else {
+				this.showAll();
+			}
+		},
 		methods: {
+			persist() {
+				this.$forceUpdate();
+				localStorage.domains = JSON.stringify(this.domainFilters);
+			},
+			init() {
+				if (localStorage.domains === 'undefined'|| localStorage.domains === undefined) {
+					this.showAll()
+				} else {
+					const activeDomainFilters = JSON.parse(localStorage.domains)
+					activeDomainFilters.forEach(domain => this.show( domain) )
+				}
+			},
 			async toggle(filter) {
 				this.isActive(filter) ? this.hide(filter) : this.show(filter)
 			},
 			show(filter) {
-				this.$store.dispatch('addDomainFilter', filter)				
+				this.$store.dispatch('addDomainFilter', filter)	
+				this.persist()			
 			},
 			hide(filter) {
 				this.$store.dispatch('removeDomainFilter', filter)
+				this.persist()	
 			},
 			showAll() {
 				this.domains.forEach(domain => { this.show( domain.node ) });
@@ -55,7 +75,7 @@
 		},
 		computed: {
 			domains() {
-				return this.$store.state.domains;
+				return this.$store.state.domains.map(Object)
 			},
 			domainFilters() {
 				return this.$store.state.filters.domains

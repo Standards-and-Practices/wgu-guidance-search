@@ -1,14 +1,14 @@
 import { createStore } from 'vuex'
-import VuexPersistence from 'vuex-persist'
+// import VuexPersistence from 'vuex-persist'
 
 // Vuex Persistence
-const vuexLocal = new VuexPersistence({
-  storage: window.localStorage
-})
+// const vuexLocal = new VuexPersistence({
+//   storage: window.localStorage
+// })
 
 // Create a new store instance.
 const store = createStore({
-    plugins: [vuexLocal.plugin],
+    // plugins: [vuexLocal.plugin],
     state () {
       return {
         assets: [],
