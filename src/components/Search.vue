@@ -1,7 +1,7 @@
 <template>
   <div>
     <DomainFilter />
-    <div class="w-1/2 my-8 mx-auto">
+    <div class="w-3/4 my-8 mx-auto">
       <SearchInput type="search" v-model="search" wrapperClass="searchWrapper" placeholder="Search Standards & Guidance" />
     </div>
   </div>
@@ -10,20 +10,18 @@
       <AssetFilter />
       <ApproachFilter />
     </div>
-    <div class="w-2/3 flex-col">
-
+    <div class="w-3/4 flex-col">
       <div v-if="$apollo.loading">Loading...</div>
       <div v-if="standards?.edges.length && activeDomainFilters.length > 0">
         <Standard :standard="standard.node" v-for="standard in standards.edges" :key="standard.id" />
       </div>
       <div v-if="!standards?.edges.length && activeDomainFilters.length > 0">
-        No results found.
+        <EmptyState />
       </div>
       <div v-if="activeDomainFilters.length == 0">
-        Please select at least one domain to search.
+        <EmptyDomainState />
       </div>
     </div>
-
   </div>
 </template>
 
@@ -32,6 +30,8 @@ import Standard from './Standard.vue'
 import DomainFilter from './DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
+import EmptyState from './EmptyState.vue';
+import EmptyDomainState from './EmptyDomainState.vue';
 import SearchInput from 'vue-search-input'
 import 'vue-search-input/dist/styles.css'
 import queries from '../queries.js';
@@ -46,7 +46,7 @@ import type { RootQueryToStandardConnectionWhereArgs, RootQueryToStandardConnect
 
 export default {
   name: 'Search',
-  components: { SearchInput, Standard, DomainFilter, AssetFilter, ApproachFilter },
+  components: { EmptyState, EmptyDomainState, SearchInput, Standard, DomainFilter, AssetFilter, ApproachFilter },
   data() {
     return {
       search: '',
@@ -75,7 +75,7 @@ export default {
         raw.forEach(domain => { polished.push(domain.node); })
 
         this.$store.dispatch('setDomains', polished)
-
+        this.$store.dispatch('setDomains', polished)
       }
     },
     standards: {

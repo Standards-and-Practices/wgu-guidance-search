@@ -1,29 +1,8 @@
 import { createApp } from 'vue';
-import { createStore } from 'vuex';
-import App from './App.vue';
-import store from './store.js';
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core';
-import { createApolloProvider } from '@vue/apollo-option';
-
+import App from './App.vue'; // Import the app
+import store from './store.js'; // Import Vuex Store
+import apolloProvider from './apollo.js'; // Import Apollo GraphQl Client
 import './index.css';
-
-const httpLink = createHttpLink({
-	// You should use an absolute URL here
-	uri: 'https://guidance.wgu.edu/standards/graphql',
-});
-
-// Cache implementation
-const cache = new InMemoryCache();
-
-// Create the apollo client
-const apolloClient = new ApolloClient({
-	link: httpLink,
-	cache,
-});
-
-const apolloProvider = createApolloProvider({
-	defaultClient: apolloClient,
-});
 
 const app = createApp(App);
 app.use(store);
