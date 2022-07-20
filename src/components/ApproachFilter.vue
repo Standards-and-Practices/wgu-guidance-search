@@ -2,12 +2,17 @@
     <div class="mb-5">
         <div class="filter-title">Approaches</div>
         <ul>
-            <li v-for="approach in approaches" :key="approach.node.databaseId">
-                <Checkbox 
-                    @click="toggleApproachFilter(approach.node)" 
-                    :modelValue="isActive(approach.node)"
-                    :label="label(approach.node.name, approach.node.count)" 
-                    v-if="approach.node.count" />
+            <li v-for="(approach, index) in approaches" :key="approach.node.databaseId">
+
+                <Checkbox @click="toggleApproachFilter(approach.node)" :modelValue="isActive(approach.node)" :label="approach.node.name" /> 
+                <Toggle v-model="showChildren[index]" v-if="approach?.node?.children?.edges?.length" class="ml-1"/>
+
+                <ul class="block" v-if="showChildren[index]" >
+                    <li v-for="child in approach?.node?.children?.edges" class="block pl-6">
+                        <Checkbox @click="toggleApproachFilter(child.node)" :modelValue="isActive(child.node)" :label="child.node.name" class="capitalize"/>
+                    </li>
+                </ul>
+
             </li>
             <li @click="showAll" v-if="approachFilters.length">Show All</li>
         </ul>
@@ -16,14 +21,13 @@
 
 <script>
 import Checkbox from "./atoms/Checkbox.vue"
+import Toggle from "./atoms/Toggle.vue";
 export default {
     name: "ApproachFilter",
-    computed: {
-        approaches() {
-            return this.$store.state.approaches;
-        },
-        approachFilters() {
-            return this.$store.state.filters.approaches;
+    components: { Checkbox, Toggle },
+    data() {
+        return {
+            showChildren: [],
         }
     },
     methods: {
@@ -41,22 +45,25 @@ export default {
 
             }
 
-    
-        },
-        label(name, count) {
-            const filterCount = count ? count : '0';
-            return `${name} (${filterCount})`
         },
         isActive(approach) {
             return this.approachFilters.includes(approach)
         },
-        showAll(){
-            this.$store.dispatch('clearAssetFilters')
+        showAll() {
+            this.$store.dispatch('clearApproachFilters')
+            this.showChildren = []
         }
     },
-    components: { Checkbox }
+    computed: {
+        approaches() {
+            return this.$store.state.approaches
+        },
+        approachFilters() {
+            return this.$store.state.filters.approaches
+        }
+    },
 }
-</script>``
+</script>
 <style scoped>
 .filter-title {
     font-family: 'Open Sans';

@@ -9,6 +9,31 @@ const getApproaches = gql`
 					name
 					uri
 					count
+					children(first: 100) {
+						edges {
+							node {
+								id
+								count
+								databaseId
+								link
+								name
+								contentNodes {
+									edges {
+										node {
+											contentType {
+												node {
+													id
+													name
+												}
+											}
+											contentTypeName
+											databaseId
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -24,6 +49,31 @@ const getAssets = gql`
 					name
 					uri
 					count
+					children(first: 100) {
+						edges {
+							node {
+								id
+								name
+								count
+								databaseId
+								link
+								contentNodes {
+									edges {
+										node {
+											contentType {
+												node {
+													id
+													name
+												}
+											}
+											contentTypeName
+											databaseId
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}

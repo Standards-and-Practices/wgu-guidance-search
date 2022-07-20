@@ -6,11 +6,11 @@
     </div>
   </div>
   <div class="container flex">
-    <div class="w-1/4">
+    <div class="w-1/3">
       <AssetFilter />
       <ApproachFilter />
     </div>
-    <div class="w-3/4 flex-col">
+    <div class="w-2/3 flex-col">
       <div v-if="$apollo.loading">Loading...</div>
       <div v-if="standards?.edges.length && activeDomainFilters.length > 0">
         <Standard :standard="standard.node" v-for="standard in standards.edges" :key="standard.id" />
@@ -33,7 +33,7 @@ import ApproachFilter from './ApproachFilter.vue';
 import EmptyState from './EmptyState.vue';
 import EmptyDomainState from './EmptyDomainState.vue';
 import SearchInput from 'vue-search-input'
-import 'vue-search-input/dist/styles.css'
+import '/node_modules/vue-search-input/dist/styles.css'
 import queries from '../queries.js';
 import {
   TaxonomyEnum,
@@ -174,4 +174,5 @@ export default {
 .searchWrapper input {
   @apply w-full;
 }
+
 </style>

@@ -2,13 +2,17 @@
     <div class="mb-5">
         <div class="filter-title">Assets</div>
         <ul>
-            <li v-for="asset in assets" :key="asset.node.databaseId" >
-                <Checkbox 
-                    @click="toggleAssetFilter(asset.node)" 
-                    :modelValue="isActive(asset.node)"
-                    :label="label(asset.node.name, asset.node.count)" 
-                    v-if="asset.node.count"
-                />
+            <li v-for="(asset, index) in assets" :key="asset.node.databaseId">
+
+                <Checkbox @click="toggleAssetFilter(asset.node)" :modelValue="isActive(asset.node)" :label="asset.node.name" /> 
+                <Toggle v-model="showChildren[index]" v-if="asset?.node?.children?.edges?.length" class="ml-1"/>
+
+                <ul class="block" v-if="showChildren[index]" >
+                    <li v-for="child in asset?.node?.children?.edges" class="block pl-6">
+                        <Checkbox @click="toggleAssetFilter(child.node)" :modelValue="isActive(child.node)" :label="child.node.name" class="capitalize"/>
+                    </li>
+                </ul>
+
             </li>
             <li @click="showAll" v-if="assetFilters.length">Show All</li>
         </ul>
@@ -17,9 +21,15 @@
 
 <script>
 import Checkbox from "./atoms/Checkbox.vue"
+import Toggle from "./atoms/Toggle.vue";
 export default {
     name: "AssetFilter",
-    components: { Checkbox },
+    components: { Checkbox, Toggle },
+    data() {
+        return {
+            showChildren: [],
+        }
+    },
     methods: {
         toggleAssetFilter(assetFilter) {
 
@@ -36,23 +46,20 @@ export default {
             }
 
         },
-        label(name, count) {
-            const filterCount = count ? count : '0';
-            return `${name} (${filterCount})`
-        },
         isActive(asset) {
             return this.assetFilters.includes(asset)
         },
-        showAll(){
+        showAll() {
             this.$store.dispatch('clearAssetFilters')
+            this.showChildren = []
         }
     },
     computed: {
         assets() {
-            return this.$store.state.assets;
+            return this.$store.state.assets
         },
         assetFilters() {
-            return this.$store.state.filters.assets;
+            return this.$store.state.filters.assets
         }
     },
 }
