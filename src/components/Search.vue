@@ -2,12 +2,7 @@
   <div>
     <DomainFilter />
     <div class="w-1/2 my-8 mx-auto">
-        <SearchInput 
-          type="search" 
-          v-model="search" 
-          wrapperClass="searchWrapper" 
-          placeholder="Search Standards & Guidance"
-        />
+      <SearchInput type="search" v-model="search" wrapperClass="searchWrapper" placeholder="Search Standards & Guidance" />
     </div>
   </div>
   <div class="container flex">
@@ -18,11 +13,14 @@
     <div class="w-2/3 flex-col">
 
       <div v-if="$apollo.loading">Loading...</div>
-      <div v-if="standards?.edges.length">
-        <Standard :standard="standard.node" v-for="(standard, index) in standards.edges" :key="standard.id" />
+      <div v-if="standards?.edges.length && activeDomainFilters.length > 0">
+        <Standard :standard="standard.node" v-for="standard in standards.edges" :key="standard.id" />
       </div>
-      <div v-if="!standards?.edges.length">
+      <div v-if="!standards?.edges.length && activeDomainFilters.length > 0">
         No results found.
+      </div>
+      <div v-if="activeDomainFilters.length == 0">
+        Please select at least one domain to search.
       </div>
     </div>
 
@@ -40,7 +38,6 @@ import queries from '../queries.js';
 import {
   TaxonomyEnum,
   RelationEnum,
-
   RootQueryToStandardConnectionWhereArgsTaxQueryField,
   RootQueryToStandardConnectionWhereArgsTaxQueryOperator
 } from '../generated/graphql';
@@ -75,11 +72,10 @@ export default {
         let raw = results.data.domains.edges
         let polished = [];
 
-        raw.forEach(domain => {
-           polished.push(domain.node);
-        })
+        raw.forEach(domain => { polished.push(domain.node); })
 
         this.$store.dispatch('setDomains', polished)
+
       }
     },
     standards: {
@@ -92,12 +88,12 @@ export default {
       },
       debounce: 750,
       result(results) {
-
         this.$store.dispatch('setStandards', results?.data?.standards?.edges)
       }
     },
   },
   mounted() {
+    // Allow a PHP variable to set a global search term, which is then picked up by our JS component as an initial search.
     if (globalThis.search) {
       this.search = globalThis.search;
     }
@@ -107,53 +103,47 @@ export default {
     filters() {
       return this.$store.state.filters
     },
-    activeDomainsArray() {
-
+    activeDomainFilters() {
       return this.filters.domains;
-
     },
-    activeAssetsArray() {
-
+    activeAssetFilters() {
       let activeAssets: string[] = []
       if (this.filters.assets) {
         activeAssets = this.filters.assets.map(object => object['databaseId']).map(String)
       }
       return activeAssets;
-
     },
-    activeApproachesArray() {
-
+    activeApproachFilters() {
       let activeApproaches: string[] = []
       if (this.filters.approaches) {
         activeApproaches = this.filters.approaches.map(object => object['databaseId']).map(String)
       }
       return activeApproaches;
-
     },
     where() {
       let taxArray: RootQueryToStandardConnectionWhereArgsTaxArray[] = []
 
-      if(this.activeApproachesArray.length) {
+      if (this.activeApproachFilters.length) {
         taxArray.push({
-          terms: this.activeApproachesArray,
+          terms: this.activeApproachFilters,
           taxonomy: TaxonomyEnum.Approach,
           operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
       }
 
-      if(this.activeAssetsArray.length) {
+      if (this.activeAssetFilters.length) {
         taxArray.push({
-          terms: this.activeAssetsArray,
+          terms: this.activeAssetFilters,
           taxonomy: TaxonomyEnum.Asset,
           operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
       }
 
-      if(this.activeDomainsArray.length) {
+      if (this.activeDomainFilters.length) {
         taxArray.push({
-          terms: this.activeDomainsArray,
+          terms: this.activeDomainFilters,
           taxonomy: TaxonomyEnum.Domain,
           operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
@@ -172,10 +162,7 @@ export default {
 
       return whereQuery;
     }
-  },
-  methods: {
-
-  },
+  }
 }
 </script>
 
@@ -183,6 +170,7 @@ export default {
 .searchWrapper {
   @apply shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;
 }
+
 .searchWrapper input {
   @apply w-full;
 }

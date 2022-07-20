@@ -6,6 +6,7 @@
     "importHelpers": true,
     "isolatedModules": true,
     "noEmit": true,
-    "allowJs": true                        /* Skip type checking all .d.ts files. */
+    "allowJs": true,
+    "jsx": "preserve",              
   }
 }

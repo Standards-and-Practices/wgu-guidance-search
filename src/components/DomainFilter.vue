@@ -32,9 +32,6 @@
 				none: icons.none,
 			};
 		},
-		mounted() {
-
-		},
 		methods: {
 			toggle(filter) {
 				this.isActive(filter.databaseId) ? this.hide(filter.databaseId) : this.show(filter.databaseId);
