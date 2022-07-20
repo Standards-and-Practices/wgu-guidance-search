@@ -14,7 +14,8 @@
                 </ul>
 
             </li>
-            <li @click="showAll" v-if="assetFilters.length">Show All</li>
+            
+            <li @click="showAll" v-if="assetFilters.length" class="mt-5"><img :src="expandAll" alt="Show All" /></li>
         </ul>
     </div>
 </template>
@@ -22,12 +23,14 @@
 <script>
 import Checkbox from "./atoms/Checkbox.vue"
 import Toggle from "./atoms/Toggle.vue";
+import expandAll from '../assets/expand-all.svg'
 export default {
     name: "AssetFilter",
     components: { Checkbox, Toggle },
     data() {
         return {
             showChildren: [],
+            expandAll,
         }
     },
     methods: {
