@@ -41,37 +41,47 @@ export default {
 
         },
         show(databaseId) {
+
             // Dispatch vuex action adding the filter to array of active asset filters.
             // console.log(`Showing ${filter}`, filter);
             this.$store.dispatch("addAssetFilter", String(databaseId));
 
         },
         hide(databaseId) {
+
             // Dispatch vuex action removing the filter from array of active asset filters.
             // console.log(`Hiding ${filter}`, filter);
             this.$store.dispatch("removeAssetFilter", String(databaseId));
 
         },
         isActive(databaseId) {
+
             // Return if given databaseId is in the array of active assets.
             return this.assetFilters.includes(String(databaseId))
+
         },
         clearFilters() {
+
             // Dispatch vuex action that clears all active asset filters.
             this.$store.dispatch('clearAssetFilters')
 
             // Clear array of child filters are open.
             this.showChildren = []
+
         }
     },
     computed: {
         assets() {
+
             // Return array of all assets.
             return this.$store.state.assets
+
         },
         assetFilters() {
+
             // Return array of all active asset filters.
             return this.$store.state.filters.assets
+            
         }
     },
 }

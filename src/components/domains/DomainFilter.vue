@@ -2,7 +2,7 @@
 	<div class="flex gap-2 flex-row justify-center my-4">
 
 		<!-- Loop the DomainFilterButtons -->
-		<DomainFilterButton :domain="domain" v-for="domain in domains" :key="domain.filter" @click="toggle(domain)" />
+		<DomainFilterButton :domain="domain" v-for="domain in domains" :key="domain.filter" @click="toggle(domain.databaseId)" />
 
 		<!-- Show All Button -->
 		<div class="flex-column">
@@ -43,17 +43,17 @@ export default {
 		show(databaseId) {
 			// Dispatch vuex action adding the filter to array of active domain filters.
 			// console.log(`Showing ${filter}`, filter);
-			this.$store.dispatch("addDomainFilter", String(databaseId));
+			this.$store.dispatch("addFilter", { filterName: 'domains', 'databaseId': String(databaseId)});
 		},
 		hide(databaseId) {
 			// Dispatch vuex action removing the filter from array of active domain filters.
 			// console.log(`Hiding ${filter}`, filter);
 			
-			this.$store.dispatch("removeDomainFilter", String(databaseId));
+			this.$store.dispatch("removeFilter", { filterName: 'domains', 'databaseId': String(databaseId)});
 		},
 		isActive(databaseId) {
 			// Return if given databaseId is in the array of active domain filters.
-			return this.domainFilters.includes(String(databaseId));
+			return this.activeDomains.includes(String(databaseId));
 		},
 		showAll() {
 			// Loop through domains and show them.
@@ -73,7 +73,7 @@ export default {
 			// Return array of all domains
 			return this.$store.state.domains;
 		},
-		domainFilters() {
+		activeDomains() {
 			// Return array of all active domain filters
 			return this.$store.state.filters.domains;
 		},

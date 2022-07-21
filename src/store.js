@@ -46,9 +46,9 @@ const store = createStore({
         state.filters.domains = domainFilters;
       },
 
-      addAssetFilter (state, filter) {
-        if(!state.filters.assets.includes(filter)) {
-          state.filters.assets.push(filter);
+      addFilter (state, filter) {
+        if(!state.filters[filter.filterName].includes(filter.databaseId)) {
+          state.filters[filter.filterName].push(filter.databaseId);
         }
       },
       addDomainFilter (state, filter) {
@@ -56,10 +56,9 @@ const store = createStore({
           state.filters.domains.push(filter);
         }
       },
-      addApproachFilter (state, filter) {
-        if(!state.filters.approaches.includes(filter)) {
-          state.filters.approaches.push(filter);
-        }
+
+      removeFilter (state, filter) {
+        state.filters[filter.filterName] = state.filters[filter.filterName].filter(o => { return o !== filter.databaseId });
       },
       removeAssetFilter (state, filter) {
         state.filters.assets = state.filters.assets.filter(o => { return o !== filter });
@@ -71,8 +70,8 @@ const store = createStore({
         state.filters.approaches = state.filters.approaches.filter(o => { return o !== filter });
       },
 
-      clearAssetFilters(state) {
-        state.filters.assets = [];
+      clearFilters(state, filter) {
+        state.filters[filter] = [];
       },
       clearApproachFilters(state) {
         state.filters.approaches = [];
@@ -86,51 +85,39 @@ const store = createStore({
         setStandards (context,standards) {
             context.commit('setStandards', standards);
         },
-        setAssets (context,assets) {
-            context.commit('setAssets', assets);
-        },
-        setApproaches (context, approaches) {
-            context.commit('setApproaches', approaches);
+        setAssets (context,filters) {
+            context.commit('setAssets', filters);
         },
         setDomains (context, domains) {
             context.commit('setDomains', domains);
         },
-
-        setAssetFilters (context, assetFilters) {
-          context.commit('setAssetFilters', assetFilters);
+        setApproaches (context, approaches) {
+            context.commit('setApproaches', approaches);
         },
-        setApproachFilters (context, approachFilters) {
-          context.commit('setApproachFilters', approachFilters);
+
+        setFilters (context, filters) {
+          context.commit('setAssetFilters', filters);
         },
         setDomainFilters (context, domainFilters) {
           context.commit('setDomainFilters', domainFilters);
         },
 
-        addAssetFilter (context, filter) {
-            context.commit('addAssetFilter', filter);
-        },
-        addApproachFilter (context, filter) {
-            context.commit('addApproachFilter', filter);
+        addFilter (context, filter) {
+            context.commit('addFilter', filter);
         },
         addDomainFilter (context, filter) {
           context.commit('addDomainFilter', filter);
         },
 
-        removeAssetFilter (context, filter) {
-          context.commit('removeAssetFilter', filter);
-        },
-        removeApproachFilter (context, filter) {
-          context.commit('removeApproachFilter', filter);
+        removeFilter (context, filter) {
+          context.commit('removeFilter', filter);
         },
         removeDomainFilter (context, filter) {
           context.commit('removeDomainFilter', filter);
         },
 
-        clearAssetFilters(context) {
-          context.commit('clearAssetFilters');
-        },
-        clearApproachFilters(context) {
-          context.commit('clearApproachFilters');
+        clearFilters(context, filter) {
+          context.commit('clearFilters', filter.filterName);
         },
         clearDomainFilters(context) {
           context.commit('clearDomainFilters');
