@@ -131,6 +131,7 @@ const getStandards = gql`
 						}
 					}
 					uri
+					link
 					title
 					principles {
 						edges {

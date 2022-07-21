@@ -4,7 +4,7 @@
         <div :style="{ color: computedColor }">
             <DomainName v-for="(domain, index) in standard?.domains?.edges" :domain="domain.node" key="index" />
         </div>
-        <a class="text-2xl font-bold">{{ standard.title }}
+        <a class="text-2xl font-bold" :href="standard.link">{{ standard.title }}
             <Toggle v-model="open" v-if="standard.guidance.guidance"/>
         </a>
         <div class="w-full flex min-h-max" :style="{ color: computedColor }">
