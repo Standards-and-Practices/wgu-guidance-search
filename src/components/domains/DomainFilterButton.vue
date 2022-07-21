@@ -20,11 +20,11 @@ export default {
 				: this.show(filter.databaseId);
 		},
 		show(filter) {
-			console.log(`Showing ${filter}`, filter);
+			// console.log(`Showing ${filter}`, filter);
 			this.$store.dispatch("addDomainFilter", String(filter));
 		},
 		hide(filter) {
-			console.log(`Hiding ${filter}`, filter);
+			// console.log(`Hiding ${filter}`, filter);
 			this.$store.dispatch("removeDomainFilter", String(filter));
 		},
 		isActive(databaseId) {

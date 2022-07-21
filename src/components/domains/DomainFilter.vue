@@ -25,7 +25,7 @@
 
 <script>
 import DomainFilterButton from "./DomainFilterButton.vue";
-import icons from "../assets/icons";
+import icons from "../../assets/icons";
 export default {
 	name: "DomainFilter",
 	components: { DomainFilterButton },
@@ -36,26 +36,33 @@ export default {
 		};
 	},
 	methods: {
-		toggle(filter) {
-			this.isActive(filter.databaseId) ? this.hide(filter.databaseId) : this.show(filter.databaseId);
+		toggle(databaseId) {
+			// Check if filter is active. If so, hide it. If not, show it.
+			this.isActive(databaseId) ? this.hide(databaseId) : this.show(databaseId);
 		},
-		show(filter) {
-			console.log(`Showing ${filter}`, filter);
-			this.$store.dispatch("addDomainFilter", String(filter));
+		show(databaseId) {
+			// Dispatch vuex action adding the filter to array of active domain filters.
+			// console.log(`Showing ${filter}`, filter);
+			this.$store.dispatch("addDomainFilter", String(databaseId));
 		},
-		hide(filter) {
-			console.log(`Hiding ${filter}`, filter);
-			this.$store.dispatch("removeDomainFilter", String(filter));
+		hide(databaseId) {
+			// Dispatch vuex action removing the filter from array of active domain filters.
+			// console.log(`Hiding ${filter}`, filter);
+			
+			this.$store.dispatch("removeDomainFilter", String(databaseId));
 		},
 		isActive(databaseId) {
+			// Return if given databaseId is in the array of active domain filters.
 			return this.domainFilters.includes(String(databaseId));
 		},
 		showAll() {
+			// Loop through domains and show them.
 			this.domains.forEach((domain) => {
 				this.show(domain.databaseId);
 			});
 		},
 		hideAll() {
+			// Loop through domains and hide them.
 			this.domains.forEach((domain) => {
 				this.hide(domain.databaseId);
 			});
@@ -63,9 +70,11 @@ export default {
 	},
 	computed: {
 		domains() {
+			// Return array of all domains
 			return this.$store.state.domains;
 		},
 		domainFilters() {
+			// Return array of all active domain filters
 			return this.$store.state.filters.domains;
 		},
 	},

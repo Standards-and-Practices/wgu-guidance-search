@@ -4,12 +4,12 @@
         <ul>
             <li v-for="(approach, index) in approaches" :key="approach.node.databaseId">
 
-                <Checkbox @click="toggleApproachFilter(approach.node)" :modelValue="isActive(approach.node)" :label="approach.node.name" /> 
+                <Checkbox @click="toggle(approach.node)" :modelValue="isActive(approach.node)" :label="approach.node.name" /> 
                 <Toggle v-model="showChildren[index]" v-if="approach?.node?.children?.edges?.length" class="ml-1"/>
 
                 <ul class="block" v-if="showChildren[index]" >
                     <li v-for="child in approach?.node?.children?.edges" class="block pl-6">
-                        <Checkbox @click="toggleApproachFilter(child.node)" :modelValue="isActive(child.node)" :label="child.node.name" class="capitalize"/>
+                        <Checkbox @click="toggle(child.node)" :modelValue="isActive(child.node)" :label="child.node.name" class="capitalize"/>
                     </li>
                 </ul>
 
@@ -33,17 +33,17 @@ export default {
         }
     },
     methods: {
-        toggleApproachFilter(approachFilter) {
+        toggle(approachFilter) {
 
             if (this.approachFilters.includes(approachFilter)) {
 
                 this.$store.dispatch('removeApproachFilter', approachFilter)
-                console.log('Remove', approachFilter);
+                // console.log('Remove', approachFilter);
 
             } else {
 
                 this.$store.dispatch('addApproachFilter', approachFilter)
-                console.log('Add', approachFilter)
+                // console.log('Add', approachFilter)
 
             }
 

@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Standard from './Standard.vue'
-import DomainFilter from './DomainFilter.vue';
+import DomainFilter from './domains/DomainFilter.vue';
 import AssetFilter from './AssetFilter.vue';
 import ApproachFilter from './ApproachFilter.vue';
 import EmptyState from './EmptyState.vue';
@@ -75,7 +75,15 @@ export default {
         raw.forEach(domain => { polished.push(domain.node); })
 
         this.$store.dispatch('setDomains', polished)
-        this.$store.dispatch('setDomains', polished)
+
+        console.log(localStorage.getItem('wgu-guidance-initialized'))
+
+        if (localStorage.getItem('wgu-guidance-initialized') !== 'true') {
+          console.log('Initializing')
+          this.$store.dispatch('setDomainFilters', polished.map(object => object['databaseId']).map(String));
+          localStorage.setItem('wgu-guidance-initialized', 'true');
+        }
+
       }
     },
     standards: {
@@ -100,56 +108,43 @@ export default {
 
   },
   computed: {
-    filters() {
-      return this.$store.state.filters
-    },
-    activeDomainFilters() {
-      return this.filters.domains;
+    activeApproachFilters() {
+      return this.$store.state.filters.approaches;
     },
     activeAssetFilters() {
-      let activeAssets: string[] = []
-      if (this.filters.assets) {
-        activeAssets = this.filters.assets.map(object => object['databaseId']).map(String)
-      }
-      return activeAssets;
+      return this.$store.state.filters.assets;
     },
-    activeApproachFilters() {
-      let activeApproaches: string[] = []
-      if (this.filters.approaches) {
-        activeApproaches = this.filters.approaches.map(object => object['databaseId']).map(String)
-      }
-      return activeApproaches;
+    activeDomainFilters() {
+      return this.$store.state.filters.domains;
     },
     where() {
       let taxArray: RootQueryToStandardConnectionWhereArgsTaxArray[] = []
 
-      if (this.activeApproachFilters.length) {
-        taxArray.push({
-          terms: this.activeApproachFilters,
-          taxonomy: TaxonomyEnum.Approach,
-          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
-          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
-        })
-      }
 
-      if (this.activeAssetFilters.length) {
-        taxArray.push({
-          terms: this.activeAssetFilters,
-          taxonomy: TaxonomyEnum.Asset,
-          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
-          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
-        })
-      }
-
-      if (this.activeDomainFilters.length) {
-        taxArray.push({
-          terms: this.activeDomainFilters,
-          taxonomy: TaxonomyEnum.Domain,
-          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
-          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
-        })
-      }
-
+if(this.activeApproachFilters.length) {
+      taxArray.push({
+        terms: this.$store.state.filters.assets,
+        taxonomy: TaxonomyEnum.Approach,
+        operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+        field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+      })
+}
+if(this.activeAssetFilters.length) {
+      taxArray.push({
+        terms: this.$store.state.filters.assets,
+        taxonomy: TaxonomyEnum.Asset,
+        operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+        field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+      })
+}
+if(this.activeDomainFilters.length) {
+      taxArray.push({
+        terms: this.activeDomainFilters,
+        taxonomy: TaxonomyEnum.Domain,
+        operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+        field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+      })
+}
       let taxQuery: RootQueryToStandardConnectionWhereArgsTaxQuery = {
         relation: RelationEnum.And,
         taxArray: taxArray,
@@ -168,11 +163,10 @@ export default {
 
 <style type="text/css">
 .searchWrapper {
-  @apply shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;
+  @apply shadow-sm block w-full sm:text-sm border-gray-300 rounded-md;
 }
 
 .searchWrapper input {
   @apply w-full;
 }
-
 </style>

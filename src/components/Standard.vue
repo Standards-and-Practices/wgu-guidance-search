@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import DomainName from "./DomainName.vue";
+import DomainName from "./Domains/DomainName.vue";
 import Guidance from './Guidance.vue';
 import Toggle from './atoms/Toggle.vue';
 import icons from '../assets/icons';
@@ -36,10 +36,14 @@ export default {
     components: { DomainName, Guidance, Toggle },
     props: {
         standard: Object,
+        open: {
+            type: Boolean,
+            default: false,
+            required: false,
+        },
     },
     data() {
         return {
-            open: false,
             tag: icons.tag,
         }
     },
