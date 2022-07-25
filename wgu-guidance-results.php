@@ -25,15 +25,14 @@
 function wgu_guidance_scripts($hook)
 {
     $path = plugin_dir_path( __DIR__ ) .'wgu-guidance-search/dist/assets/index.*.js';
-    do_action( 'qm/debug', $path );
     $files = glob($path);
 
-    do_action( 'qm/debug', $files );
-        foreach($files as $file) {
-            wp_enqueue_script( 'wgu_guidance_search_script', $file);
-        };
+    foreach($files as $file) {
+        $file_formatted = str_replace('/var/www/webroot/ROOT', '', $file);
+        do_action( 'qm/debug', $file_formatted );
+        wp_enqueue_script( 'wgu_guidance_search_script', str_replace('/var/www/webroot/ROOT', '', $file_formatted));
+    };
 
-    // wp_enqueue_script( 'wgu_guidance_search_script', plugin_dir_path( __DIR__ ) .'/wgu-guidance-search/dist/assets/index.js');
 }
 add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
 
