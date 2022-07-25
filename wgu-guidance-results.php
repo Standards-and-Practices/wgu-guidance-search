@@ -24,12 +24,16 @@
 
 function wgu_guidance_scripts($hook)
 {
-    wp_enqueue_script( 'wgu_guidance_results_script', '/wp-content/plugins/wgu-guidance-results/dist/assets/index.js');
+    if (is_admin()) {
+    $files = glob(plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.*.js');
+    var_dump($files);
+    }
+    wp_enqueue_script( 'wgu_guidance_results_script', plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.js');
 }
 add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
 
 function wgu_guidance_styles($hook)
 {
-    wp_enqueue_style( 'wgu_guidance_results_style', '/wp-content/plugins/wgu-guidance-results/dist/assets/index.css');
+    wp_enqueue_style( 'wgu_guidance_results_style', plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.css');
 }
 add_action('wp_enqueue_styles', 'wgu_guidance_styles');
