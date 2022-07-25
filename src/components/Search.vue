@@ -1,13 +1,15 @@
 <template>
   <div>
-    <DomainFilter />
+    <div class="w-full">
+      <DomainFilter />
+    </div>
     <div class="w-3/4 my-8 mx-auto">
       <SearchInput type="search" v-model="search" wrapperClass="searchWrapper" placeholder="Search Standards & Guidance" />
     </div>
   </div>
   <div class="container flex">
     <div class="w-1/3">
-      <TaxonomyFilter filterName="assets" :items="assets.edges" :activeItems="activeAssetFilters" v-if="assets?.edges"/>
+      <TaxonomyFilter filterName="assets" :items="assets.edges" :activeItems="activeAssetFilters" v-if="assets?.edges" />
       <TaxonomyFilter filterName="approaches" :items="approaches.edges" :activeItems="activeApproachFilters" v-if="approaches?.edges" />
     </div>
     <div class="w-2/3 flex-col">
@@ -126,30 +128,30 @@ export default {
       let taxArray: RootQueryToStandardConnectionWhereArgsTaxArray[] = []
 
 
-if(this.activeApproachFilters.length) {
-      taxArray.push({
-        terms: this.$store.state.filters.assets,
-        taxonomy: TaxonomyEnum.Approach,
-        operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
-        field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
-      })
-}
-if(this.activeAssetFilters.length) {
-      taxArray.push({
-        terms: this.$store.state.filters.assets,
-        taxonomy: TaxonomyEnum.Asset,
-        operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
-        field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
-      })
-}
-if(this.activeDomainFilters.length) {
-      taxArray.push({
-        terms: this.activeDomainFilters,
-        taxonomy: TaxonomyEnum.Domain,
-        operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
-        field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
-      })
-}
+      if (this.activeApproachFilters.length) {
+        taxArray.push({
+          terms: this.$store.state.filters.assets,
+          taxonomy: TaxonomyEnum.Approach,
+          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+        })
+      }
+      if (this.activeAssetFilters.length) {
+        taxArray.push({
+          terms: this.$store.state.filters.assets,
+          taxonomy: TaxonomyEnum.Asset,
+          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+        })
+      }
+      if (this.activeDomainFilters.length) {
+        taxArray.push({
+          terms: this.activeDomainFilters,
+          taxonomy: TaxonomyEnum.Domain,
+          operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
+          field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
+        })
+      }
       let taxQuery: RootQueryToStandardConnectionWhereArgsTaxQuery = {
         relation: RelationEnum.And,
         taxArray: taxArray,
@@ -168,7 +170,7 @@ if(this.activeDomainFilters.length) {
 
 <style type="text/css">
 .searchWrapper {
-  @apply shadow-sm block w-full sm:text-sm border-gray-300 rounded-md;
+  @apply shadow-sm block w-full border-gray-300 rounded-md;
 }
 
 .searchWrapper input {

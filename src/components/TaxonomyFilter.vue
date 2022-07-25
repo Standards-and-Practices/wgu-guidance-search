@@ -1,23 +1,30 @@
 <template>
-    <div class="mb-5">
-        <div class="filter-title capitalize">{{ filterName }}</div>
-        <ul>
-            <li v-for="(item, index) in items" :key="item.node.databaseId">
+    <Suspense>
+        <template #default>
+            <div class="mb-5">
+                <div class="filter-title capitalize">{{ filterName }}</div>
+                <ul>
+                    <li v-for="(item, index) in items" :key="item.node.databaseId">
 
-                <Checkbox @click="toggle(item.node.databaseId)" :modelValue="isActive(item.node.databaseId)" :label="item.node.name" />
-                <Toggle v-model="showChildren[index]" v-if="item?.node?.children?.edges?.length" class="ml-1" />
+                        <Checkbox @click="toggle(item.node.databaseId)" :modelValue="isActive(item.node.databaseId)" :label="item.node.name" />
+                        <Toggle v-model="showChildren[index]" v-if="item?.node?.children?.edges?.length" class="ml-1" />
 
-                <ul class="block" v-if="showChildren[index]">
-                    <li v-for="child in item?.node?.children?.edges" :key="child.node.databaseId" class="block pl-6">
-                        <Checkbox @click="toggle(child.node.databaseId)" :modelValue="isActive(child.node.databaseId)" :label="child.node.name" class="capitalize" />
+                        <ul class="block" v-if="showChildren[index]">
+                            <li v-for="child in item?.node?.children?.edges" :key="child.node.databaseId" class="block pl-6">
+                                <Checkbox @click="toggle(child.node.databaseId)" :modelValue="isActive(child.node.databaseId)" :label="child.node.name" class="capitalize" />
+                            </li>
+                        </ul>
+
                     </li>
+
+                    <li @click="clearFilters" v-if="activeItems.length" class="mt-5"><img :src="expandAll" alt="Show All" class="w-20" /></li>
                 </ul>
-
-            </li>
-
-            <li @click="clearFilters" v-if="activeItems.length" class="mt-5"><img :src="expandAll" alt="Show All" class="w-20" /></li>
-        </ul>
-    </div>
+            </div>
+        </template>
+        <template #fallback>
+            <div>Loading taxonomy</div>
+        </template>
+    </Suspense>
 </template>
 
 <script>
