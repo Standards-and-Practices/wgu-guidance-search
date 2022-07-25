@@ -1,5 +1,5 @@
 <template>
-    <div class="p-2 w-full">{{example.text}}}</div>
+    <div class="p-2 w-full" v-html="example.text"></div>
 </template>
 <script>
 export default {

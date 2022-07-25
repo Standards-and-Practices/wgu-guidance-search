@@ -179,6 +179,12 @@ const getStandards = gql`
 								... on Standard_Guidance_guidance_GuidanceExamples_InfoBlock {
 									text
 								}
+								... on Standard_Guidance_guidance_GuidanceExamples_InfoImage {
+									infoImage {
+										sourceUrl
+									}
+									infoCaption
+								}
 							}
 						}
 					}
