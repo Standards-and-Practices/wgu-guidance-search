@@ -13,7 +13,7 @@
  * @package           WGU_Guidance_Search
  *
  * @wordpress-plugin
- * Plugin Name:       Guidance Results
+ * Plugin Name:       WGU Guidance Results
  * Plugin URI:        https://github.com/Standards-and-Practices/wgu-guidance-search
  * Description:       Enable search for WGU Guidance System.
  * Version:           1.0.0
@@ -24,24 +24,12 @@
 
 function wgu_guidance_scripts($hook)
 {
-
-    foreach( glob( get_template_directory(). '/dist/assets/*.js' ) as $file ) {
-        // $file contains the name and extension of the file
-        wp_enqueue_script( $file, get_template_directory_uri().'/path/'.$file);
-    }
-
-
+    wp_enqueue_script( 'wgu_guidance_results_script', plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.js');
 }
 add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
 
 function wgu_guidance_styles($hook)
 {
-
-    foreach( glob( get_template_directory(). '/dist/assets/*.css' ) as $file ) {
-        // $file contains the name and extension of the file
-        wp_enqueue_style( $file, get_template_directory_uri().'/path/'.$file);
-    }
-
-
+    wp_enqueue_style( 'wgu_guidance_results_style', plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.css');
 }
 add_action('wp_enqueue_styles', 'wgu_guidance_styles');
