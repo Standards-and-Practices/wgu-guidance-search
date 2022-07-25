@@ -26,8 +26,9 @@ function wgu_guidance_scripts($hook)
 {
 
     $files = glob(plugin_dir_path( __DIR__ ) .'wgu-guidance-results/dist/assets/index.*.js');
+    var_dump($files);
         foreach($files as $file) {
-            wp_enqueue_script( 'wgu_guidance_results_script', $files);
+            wp_enqueue_script( 'wgu_guidance_results_script', $file);
         };
 
     // wp_enqueue_script( 'wgu_guidance_results_script', plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.js');
