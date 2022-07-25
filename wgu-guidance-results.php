@@ -26,7 +26,7 @@ function wgu_guidance_scripts($hook)
 {
 
     $files = glob(plugin_dir_path( __DIR__ ) .'wgu-guidance-results/dist/assets/index.*.js');
-    var_dump($files);
+    do_action( 'qm/debug', $files );
         foreach($files as $file) {
             wp_enqueue_script( 'wgu_guidance_results_script', $file);
         };
