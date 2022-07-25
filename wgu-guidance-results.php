@@ -24,12 +24,12 @@
 
 function wgu_guidance_scripts($hook)
 {
-    if (is_admin()) {
+
     $files = glob(plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.*.js');
         foreach($files as $file) {
-            echo($file.'<br/>');
+            wp_enqueue_script( 'wgu_guidance_results_script', $file);
         };
-    }
+
     wp_enqueue_script( 'wgu_guidance_results_script', plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.js');
 }
 add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
