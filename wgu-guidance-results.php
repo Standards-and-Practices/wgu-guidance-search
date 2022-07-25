@@ -24,8 +24,10 @@
 
 function wgu_guidance_scripts($hook)
 {
+    $path = plugin_dir_path( __DIR__ ) .'wgu-guidance-results/dist/assets/index.*.js';
+    do_action( 'qm/debug', $path );
+    $files = glob($path);
 
-    $files = glob(plugin_dir_path( __DIR__ ) .'wgu-guidance-results/dist/assets/index.*.js');
     do_action( 'qm/debug', $files );
         foreach($files as $file) {
             wp_enqueue_script( 'wgu_guidance_results_script', $file);
