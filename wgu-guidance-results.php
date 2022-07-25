@@ -30,7 +30,7 @@ function wgu_guidance_scripts($hook)
             wp_enqueue_script( 'wgu_guidance_results_script', $files);
         };
 
-    wp_enqueue_script( 'wgu_guidance_results_script', plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.js');
+    // wp_enqueue_script( 'wgu_guidance_results_script', plugin_dir_path( __DIR__ ) .'/wgu-guidance-results/dist/assets/index.js');
 }
 add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
 
