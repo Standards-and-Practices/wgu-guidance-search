@@ -57,7 +57,6 @@ export default {
     },
     computed: {
         computedColor() {
-
             return this.standard?.domains?.edges[0]?.node?.displaySettings?.color
         },
         computedColorFaded() {

@@ -20,6 +20,7 @@ import productDesignInactive from './product-design-inactive.svg';
 import productDesign from './product-design.svg';
 import prototypingInactive from './prototyping-inactive.svg';
 import prototyping from './prototyping.svg';
+import semiChecked from './semi-checked.svg';
 import select from './select.png';
 import socialEmotionalLearningInactive from './social-emotional-learning-inactive.svg';
 import socialEmotionalLearning from './social-emotional-learning.svg';
@@ -50,6 +51,7 @@ const icons = {
 	productDesign,
 	prototypingInactive,
 	prototyping,
+	semiChecked,
 	select,
 	socialEmotionalLearningInactive,
 	socialEmotionalLearning,

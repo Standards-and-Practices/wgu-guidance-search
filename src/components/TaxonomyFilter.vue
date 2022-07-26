@@ -6,18 +6,34 @@
                 <ul>
                     <li v-for="(item, index) in items" :key="item.node.databaseId">
 
-                        <Checkbox @click="toggle(item.node.databaseId)" :modelValue="isActive(item.node.databaseId)" :label="item.node.name" />
-                        <Toggle v-model="showChildren[index]" v-if="item?.node?.children?.edges?.length" class="ml-1" />
+                        <Checkbox 
+                            @click="toggleChildren(item.node)" 
+                            :modelValue="isActive(item.node.databaseId)"
+                            :isSemiChecked="isSemiChecked(item.node)"
+                            :label="item.node.name"
+                         />
+                        <Toggle 
+                            v-model="showChildren[index]" 
+                            v-if="item?.node?.children?.edges?.length" 
+                            class="ml-1"
+                        />
 
                         <ul class="block" v-if="showChildren[index]">
                             <li v-for="child in item?.node?.children?.edges" :key="child.node.databaseId" class="block pl-6">
-                                <Checkbox @click="toggle(child.node.databaseId)" :modelValue="isActive(child.node.databaseId)" :label="child.node.name" class="capitalize" />
+                                <Checkbox 
+                                    @click="toggle(child.node.databaseId)" 
+                                    :modelValue="isActive(child.node.databaseId)" 
+                                    :label="child.node.name" 
+                                    class="capitalize" 
+                                />
                             </li>
                         </ul>
 
                     </li>
 
-                    <li @click="clearFilters" v-if="activeItems.length" class="mt-5"><img :src="expandAll" alt="Show All" class="w-20" /></li>
+                    <li @click="clearFilters" v-if="activeItems.length" class="mt-5">
+                        <img :src="expandAll" alt="Show All" class="w-20" />
+                    </li>
                 </ul>
             </div>
         </template>
@@ -32,7 +48,7 @@ import Checkbox from "./atoms/Checkbox.vue"
 import Toggle from "./atoms/Toggle.vue";
 import expandAll from '../assets/expand-all.svg'
 export default {
-    name: "Filter",
+    name: "TaxonomyFilter",
     components: { Checkbox, Toggle },
     props: {
         filterName: {
@@ -57,6 +73,18 @@ export default {
 
             // Check if filter is active. If so, hide it. If not, show it.
             this.isActive(databaseId) ? this.hide(databaseId) : this.show(databaseId);
+
+        },
+        toggleChildren(taxonomy) {
+            console.log(taxonomy);
+            
+            if (this.isActive(taxonomy.databaseId)) {
+                this.hide(taxonomy.databaseId);
+                taxonomy.children.edges.forEach(child => this.hide(child.node.databaseId));
+            } else {
+                this.show(taxonomy.databaseId);
+                taxonomy.children.edges.forEach(child => this.show(child.node.databaseId));
+            }
 
         },
         show(databaseId) {
@@ -95,6 +123,19 @@ export default {
             // Clear array of child filters are open.
             this.showChildren = []
 
+        },
+        isSemiChecked(item) {
+            // console.log('Checking children', item)
+            let childrenChecked = 0;
+
+            item.children.edges.forEach(child => {
+                // console.log('Child', this.isActive(child.node.databaseId))
+                this.isActive(child.node.databaseId) ? childrenChecked++ : childrenChecked = childrenChecked;
+            });
+            
+            console.log('Total Item Children Count',  item.children.edges.length)
+            console.log('Number of Children Selected', childrenChecked)
+            return Boolean((item.children.edges.length !== childrenChecked) && (childrenChecked !== 0));
         }
     }
 }
