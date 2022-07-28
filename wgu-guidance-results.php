@@ -48,7 +48,7 @@ function wgu_guidance_styles($hook) {
         wp_enqueue_script( 'wgu_guidance_search_style', $file_formatted);
     };
 }
-add_action('wp_enqueue_styles', 'wgu_guidance_styles');
+add_action('wp_enqueue_scripts', 'wgu_guidance_styles');
 
 
 
