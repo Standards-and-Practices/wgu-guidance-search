@@ -38,7 +38,7 @@ import Standard from './Standard.vue'
 import DomainFilter from './domains/DomainFilter.vue';
 import TaxonomyFilter from './TaxonomyFilter.vue';
 import EmptyState from './empty/EmptyState.vue';
-import EmptyDomainState from './EmptyDomainState.vue';
+import EmptyDomainState from './empty/EmptyDomainState.vue';
 import SearchInput from 'vue-search-input';
 import 'vue-search-input/dist/styles.css';
 
