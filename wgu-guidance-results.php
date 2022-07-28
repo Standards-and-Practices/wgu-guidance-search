@@ -45,7 +45,7 @@ function wgu_guidance_styles($hook) {
     foreach($files as $file) {
         $file_formatted = str_replace('/var/www/webroot/ROOT', '', $file);
         do_action( 'qm/debug', $file_formatted );
-        wp_enqueue_script( 'wgu_guidance_search_style', $file_formatted);
+        wp_enqueue_style( 'wgu_guidance_search_style', $file_formatted);
     };
 }
 add_action('wp_enqueue_scripts', 'wgu_guidance_styles');
