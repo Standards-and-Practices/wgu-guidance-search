@@ -40,7 +40,8 @@ add_action('wp_enqueue_scripts', 'wgu_guidance_scripts');
 function wgu_guidance_styles($hook) {
     $path = plugin_dir_path( __DIR__ ) .'wgu-guidance-search/dist/assets/index.*.css';
     $files = glob($path);
-
+    do_action( 'qm/debug', "Started enqueuing" );
+    do_action( 'qm/debug', $files );
     foreach($files as $file) {
         $file_formatted = str_replace('/var/www/webroot/ROOT', '', $file);
         do_action( 'qm/debug', $file_formatted );
