@@ -4,20 +4,7 @@
       <DomainFilter />
     </div>
     <div class="w-3/4 my-8 mx-auto">
-      <SearchInput 
-        type="search" 
-        v-model="search" 
-        wrapperClass="search-input-wrapper" 
-        placeholder="Search Standards & Guidance"
-        :searchIcon="true"
-        :shortcutIcon="true"
-        :clearIcon="true"
-        :hideShortcutIconOnBlur="true"
-        :clearOnEsc="true"
-        :blurOnEsc="true"
-        :selectOnFocus="true"
-        :shortcutListenerEnabled="true"
-    />
+      <SearchInput type="search" v-model="search" wrapperClass="search-input-wrapper" placeholder="Search Standards & Guidance" :searchIcon="true" :shortcutIcon="true" :clearIcon="true" :hideShortcutIconOnBlur="true" :clearOnEsc="true" :blurOnEsc="true" :selectOnFocus="true" :shortcutListenerEnabled="true" />
     </div>
   </div>
   <div class="container flex">
@@ -34,7 +21,7 @@
 
       <div v-if="!standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.loading">
         <!-- If there aren't any results, but domains are selected, and it's not loading, show an empty state message. -->
-        <EmptyState :search="search" :domains="domains?.edges" :approaches="approaches?.edges" :assets="assets?.edges" />
+        <EmptyState />
       </div>
 
       <div v-if="activeDomainFilters.length == 0 && !$apollo.loading">
@@ -50,7 +37,7 @@
 import Standard from './Standard.vue'
 import DomainFilter from './domains/DomainFilter.vue';
 import TaxonomyFilter from './TaxonomyFilter.vue';
-import EmptyState from './EmptyState.vue';
+import EmptyState from './empty/EmptyState.vue';
 import EmptyDomainState from './EmptyDomainState.vue';
 import SearchInput from 'vue-search-input';
 import 'vue-search-input/dist/styles.css';
@@ -72,13 +59,25 @@ export default {
     approaches: {
       query: queries.getApproaches,
       result(results) {
-        this.$store.dispatch('setApproaches', results.data.approaches.edges)
+
+        let raw = results.data.approaches.edges
+        let polished = [];
+        raw.forEach(approach => { polished.push(approach.node); })
+
+        this.$store.dispatch('setApproaches', polished)
+
       }
     },
     assets: {
       query: queries.getAssets,
       result(results) {
-        this.$store.dispatch('setAssets', results.data.assets.edges)
+
+        let raw = results.data.assets.edges
+        let polished = [];
+        raw.forEach(asset => { polished.push(asset.node); })
+
+        this.$store.dispatch('setAssets', polished)
+
       }
     },
     domains: {
@@ -136,20 +135,22 @@ export default {
 
       if (this.activeApproachFilters.length) {
         taxArray.push({
-          terms: this.$store.state.filters.assets,
+          terms: this.activeApproachFilters,
           taxonomy: TaxonomyEnum.Approach,
           operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
       }
+
       if (this.activeAssetFilters.length) {
         taxArray.push({
-          terms: this.$store.state.filters.assets,
+          terms: this.activeAssetFilters,
           taxonomy: TaxonomyEnum.Asset,
           operator: RootQueryToStandardConnectionWhereArgsTaxQueryOperator.In,
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
       }
+
       if (this.activeDomainFilters.length) {
         taxArray.push({
           terms: this.activeDomainFilters,
@@ -158,6 +159,7 @@ export default {
           field: RootQueryToStandardConnectionWhereArgsTaxQueryField.TaxonomyId,
         })
       }
+
       let taxQuery: RootQueryToStandardConnectionWhereArgsTaxQuery = {
         relation: RelationEnum.And,
         taxArray: taxArray,
@@ -191,5 +193,4 @@ export default {
   @apply w-full focus:ring-accent-blue focus:ring-2 focus:ring-opacity-60 focus:border-none text-xl;
   padding: 6px 30px 6px 52px;
 }
-
 </style>
