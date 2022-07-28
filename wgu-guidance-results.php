@@ -29,7 +29,7 @@ function wgu_guidance_scripts($hook) {
     foreach($files as $file) {
         $file_formatted = str_replace('/var/www/webroot/ROOT', '', $file);
         do_action( 'qm/debug', $file_formatted );
-        wp_enqueue_script( 'wgu_guidance_search_script', str_replace('/var/www/webroot/ROOT', '', $file_formatted));
+        wp_enqueue_script( 'wgu_guidance_search_script', $file_formatted);
     };
 
 }
@@ -44,7 +44,7 @@ function wgu_guidance_styles($hook) {
     foreach($files as $file) {
         $file_formatted = str_replace('/var/www/webroot/ROOT', '', $file);
         do_action( 'qm/debug', $file_formatted );
-        wp_enqueue_script( 'wgu_guidance_search_style', str_replace('/var/www/webroot/ROOT', '', $file_formatted));
+        wp_enqueue_script( 'wgu_guidance_search_style', $file_formatted);
     };
 }
 add_action('wp_enqueue_styles', 'wgu_guidance_styles');
