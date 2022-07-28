@@ -1,7 +1,7 @@
 <template>
 	<div class="flex-column">
 		<img class="w-30 mx-auto mb-2" :src="isActive(domain.databaseId) ? domain.displaySettings.activeIcon.sourceUrl : domain.displaySettings.inactiveIcon.sourceUrl" />
-		<p class="domain-name" :style="{ color: domain?.displaySettings?.color }">{{ domain.name }}</p>
+		<p class="filter-button" :style="{ color: domain?.displaySettings?.color }">{{ domain.name }}</p>
 	</div>
 </template>
 
@@ -41,15 +41,5 @@ export default {
 	},
 }
 </script>
-
 <style scoped>
-.domain-name {
-	@apply break-normal mx-auto uppercase text-center w-28;
-	font-family: "Open Sans";
-	font-style: normal;
-	font-weight: 700;
-	font-size: 9px;
-	line-height: 130%;
-}
 </style>
-

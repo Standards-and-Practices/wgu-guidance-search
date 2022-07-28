@@ -4,7 +4,20 @@
       <DomainFilter />
     </div>
     <div class="w-3/4 my-8 mx-auto">
-      <SearchInput type="search" v-model="search" wrapperClass="searchWrapper" placeholder="Search Standards & Guidance" />
+      <SearchInput 
+        type="search" 
+        v-model="search" 
+        wrapperClass="search-input-wrapper" 
+        placeholder="Search Standards & Guidance"
+        :searchIcon="true"
+        :shortcutIcon="true"
+        :clearIcon="true"
+        :hideShortcutIconOnBlur="true"
+        :clearOnEsc="true"
+        :blurOnEsc="true"
+        :selectOnFocus="true"
+        :shortcutListenerEnabled="true"
+    />
     </div>
   </div>
   <div class="container flex">
@@ -21,7 +34,7 @@
 
       <div v-if="!standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.loading">
         <!-- If there aren't any results, but domains are selected, and it's not loading, show an empty state message. -->
-        <EmptyState />
+        <EmptyState :search="search" :domains="domains?.edges" :approaches="approaches?.edges" :assets="assets?.edges" />
       </div>
 
       <div v-if="activeDomainFilters.length == 0 && !$apollo.loading">
@@ -39,8 +52,9 @@ import DomainFilter from './domains/DomainFilter.vue';
 import TaxonomyFilter from './TaxonomyFilter.vue';
 import EmptyState from './EmptyState.vue';
 import EmptyDomainState from './EmptyDomainState.vue';
-import SearchInput from 'vue-search-input'
-import '/node_modules/vue-search-input/dist/styles.css'
+import SearchInput from 'vue-search-input';
+import 'vue-search-input/dist/styles.css';
+
 import queries from '../queries.js';
 import {
   TaxonomyEnum,
@@ -54,11 +68,6 @@ import type { RootQueryToStandardConnectionWhereArgs, RootQueryToStandardConnect
 export default {
   name: 'Search',
   components: { EmptyState, EmptyDomainState, SearchInput, Standard, DomainFilter, TaxonomyFilter },
-  data() {
-    return {
-      search: '',
-    }
-  },
   apollo: {
     approaches: {
       query: queries.getApproaches,
@@ -83,10 +92,7 @@ export default {
 
         this.$store.dispatch('setDomains', polished)
 
-        // console.log(localStorage.getItem('wgu-guidance-initialized'))
-
         if (localStorage.getItem('wgu-guidance-initialized') !== 'true') {
-          console.log('Initializing')
           this.$store.dispatch('setDomainFilters', polished.map(object => object['databaseId']).map(String));
           localStorage.setItem('wgu-guidance-initialized', 'true');
         }
@@ -163,17 +169,27 @@ export default {
       }
 
       return whereQuery;
+    },
+    search: {
+      get() {
+        return this.$store.state.search;
+      },
+      set(value) {
+        this.$store.dispatch('setSearch', value);
+      },
     }
   }
 }
 </script>
 
 <style type="text/css">
-.searchWrapper {
-  @apply shadow-sm block w-full border-gray-300 rounded-md;
+.search-input-wrapper {
+  @apply border-gray shadow-sm block w-full rounded-md;
 }
 
-.searchWrapper input {
-  @apply w-full;
+.search-input-wrapper input[data-search-input=true] {
+  @apply w-full focus:ring-accent-blue focus:ring-2 focus:ring-opacity-60 focus:border-none text-xl;
+  padding: 6px 30px 6px 52px;
 }
+
 </style>

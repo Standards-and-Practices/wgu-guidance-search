@@ -1,92 +1,60 @@
 <template>
 	<div class="flex gap-2 flex-row justify-center my-4">
-
 		<!-- Loop the DomainFilterButtons -->
 		<DomainFilterButton :domain="domain" v-for="domain in domains" :key="domain.filter" @click="toggle(domain.databaseId)" />
 
 		<!-- Show All Button -->
-		<div class="flex-column">
-			<label @click="showAll">
-				<img class="w-30 mx-auto mb-2" :src="all" />
-				<p class="domain-name">Show All</p>
-			</label>
-		</div>
+		<ShowAllButton />
 
 		<!-- Hide All Button -->
-		<div class="flex-column">
-			<label @click="hideAll">
-				<img class="w-30 mx-auto mb-2" :src="none" />
-				<p class="domain-name">Hide All</p>
-			</label>
-		</div>
-
+		<HideAllButton />
 	</div>
 </template>
 
 <script>
-import DomainFilterButton from "./DomainFilterButton.vue";
-import icons from "../../assets/icons";
-export default {
-	name: "DomainFilter",
-	components: { DomainFilterButton },
-	data() {
-		return {
-			all: icons.all,
-			none: icons.none,
-		};
-	},
-	methods: {
-		toggle(databaseId) {
-			// Check if filter is active. If so, hide it. If not, show it.
-			this.isActive(databaseId) ? this.hide(databaseId) : this.show(databaseId);
+	import HideAllButton from './HideAllButton.vue';
+	import ShowAllButton from './ShowAllButton.vue';
+	import DomainFilterButton from './DomainFilterButton.vue';
+	import icons from '../../assets/icons';
+	export default {
+		name: 'DomainFilter',
+		components: { DomainFilterButton, ShowAllButton, HideAllButton },
+		data() {
+			return {
+				all: icons.all,
+				none: icons.none,
+			};
 		},
-		show(databaseId) {
-			// Dispatch vuex action adding the filter to array of active domain filters.
-			// console.log(`Showing ${filter}`, filter);
-			this.$store.dispatch("addFilter", { filterName: 'domains', 'databaseId': String(databaseId)});
-		},
-		hide(databaseId) {
-			// Dispatch vuex action removing the filter from array of active domain filters.
-			// console.log(`Hiding ${filter}`, filter);
+		methods: {
+			toggle(databaseId) {
+				// Check if filter is active. If so, hide it. If not, show it.
+				this.isActive(databaseId) ? this.hide(databaseId) : this.show(databaseId);
+			},
+			show(databaseId) {
+				// Dispatch vuex action adding the filter to array of active domain filters.
+				this.$store.dispatch('addFilter', { filterName: 'domains', databaseId: String(databaseId) });
+			},
+			hide(databaseId) {
+				// Dispatch vuex action removing the filter from array of active domain filters.
+				this.$store.dispatch('removeFilter', { filterName: 'domains', databaseId: String(databaseId) });
+			},
+			isActive(databaseId) {
+				// Return if given databaseId is in the array of active domain filters.
+				return this.activeDomains.includes(String(databaseId));
+			},
 			
-			this.$store.dispatch("removeFilter", { filterName: 'domains', 'databaseId': String(databaseId)});
 		},
-		isActive(databaseId) {
-			// Return if given databaseId is in the array of active domain filters.
-			return this.activeDomains.includes(String(databaseId));
+		computed: {
+			domains() {
+				// Return array of all domains
+				return this.$store.state.domains;
+			},
+			activeDomains() {
+				// Return array of all active domain filters
+				return this.$store.state.filters.domains;
+			},
 		},
-		showAll() {
-			// Loop through domains and show them.
-			this.domains.forEach((domain) => {
-				this.show(domain.databaseId);
-			});
-		},
-		hideAll() {
-			// Loop through domains and hide them.
-			this.domains.forEach((domain) => {
-				this.hide(domain.databaseId);
-			});
-		},
-	},
-	computed: {
-		domains() {
-			// Return array of all domains
-			return this.$store.state.domains;
-		},
-		activeDomains() {
-			// Return array of all active domain filters
-			return this.$store.state.filters.domains;
-		},
-	},
-};
+	};
 </script>
 <style scoped>
-.domain-name {
-	@apply break-normal mx-auto uppercase text-center w-28;
-	font-family: "Open Sans";
-	font-style: normal;
-	font-weight: 700;
-	font-size: 9px;
-	line-height: 130%;
-}
 </style>

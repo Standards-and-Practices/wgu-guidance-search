@@ -11,6 +11,7 @@ const store = createStore({
 	plugins: [vuexLocal.plugin],
 	state() {
 		return {
+			search: "",
 			assets: [],
 			approaches: [],
 			domains: [],
@@ -23,6 +24,9 @@ const store = createStore({
 		};
 	},
 	mutations: {
+		setSearch(state, search) {
+			state.search = search;
+		},
 		setAssets(state, assets) {
 			state.assets = assets;
 		},
@@ -57,8 +61,22 @@ const store = createStore({
 		clearFilters(state, filter) {
 			state.filters[filter] = [];
 		},
+
+		showAllDomains(state) {
+			state.filters.domains = []
+			state.domains.forEach((domain) => {
+				state.filters.domains.push(String(domain.databaseId));
+			});
+		}
 	},
 	actions: {
+
+		//////////////////////////////////////////////
+		// MODEL SETTERS
+		//////////////////////////////////////////////
+		setSearch(context, search) {
+			context.commit('setSearch', search);
+		},
 		setStandards(context, standards) {
 			context.commit('setStandards', standards);
 		},
@@ -71,12 +89,23 @@ const store = createStore({
 		setApproaches(context, approaches) {
 			context.commit('setApproaches', approaches);
 		},
-		setFilters(context, filters) {
-			context.commit('setAssetFilters', filters);
+
+		//////////////////////////////////////////////
+		// FILTER SETTERS
+		//////////////////////////////////////////////
+		setAssetFilters(context, assetFilters) {
+			context.commit('setAssetFilters', assetFilters);
+		},
+		setApproachFilters(context, setApproachFilters) {
+			context.commit('setApproachFilters', setApproachFilters);
 		},
 		setDomainFilters(context, domainFilters) {
 			context.commit('setDomainFilters', domainFilters);
 		},
+
+		//////////////////////////////////////////////
+		// FILTER OPERATIONS
+		//////////////////////////////////////////////
 		addFilter(context, filter) {
 			context.commit('addFilter', filter);
 		},
@@ -84,8 +113,12 @@ const store = createStore({
 			context.commit('removeFilter', filter);
 		},
 		clearFilters(context, filter) {
-			context.commit('clearFilters', filter.filterName);
+			context.commit('clearFilters', filter);
 		},
+
+		showAllDomains(context) {
+			context.commit('showAllDomains');
+		}
 	},
 });
 

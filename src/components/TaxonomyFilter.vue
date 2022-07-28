@@ -6,26 +6,12 @@
                 <ul>
                     <li v-for="(item, index) in items" :key="item.node.databaseId">
 
-                        <Checkbox 
-                            @click="toggleChildren(item.node)" 
-                            :modelValue="isActive(item.node.databaseId)"
-                            :isSemiChecked="isSemiChecked(item.node)"
-                            :label="item.node.name"
-                         />
-                        <Toggle 
-                            v-model="showChildren[index]" 
-                            v-if="item?.node?.children?.edges?.length" 
-                            class="ml-1"
-                        />
+                        <Checkbox @click="toggleChildren(item.node)" :modelValue="isActive(item.node.databaseId)" :isSemiChecked="isSemiChecked(item.node)" :label="item.node.name" />
+                        <Toggle v-model="showChildren[index]" v-if="item?.node?.children?.edges?.length" class="ml-1" />
 
                         <ul class="block" v-if="showChildren[index]">
                             <li v-for="child in item?.node?.children?.edges" :key="child.node.databaseId" class="block pl-6">
-                                <Checkbox 
-                                    @click="toggle(child.node.databaseId)" 
-                                    :modelValue="isActive(child.node.databaseId)" 
-                                    :label="child.node.name" 
-                                    class="capitalize" 
-                                />
+                                <Checkbox @click="toggle(child.node.databaseId)" :modelValue="isActive(child.node.databaseId)" :label="child.node.name" class="capitalize" />
                             </li>
                         </ul>
 
@@ -76,8 +62,8 @@ export default {
 
         },
         toggleChildren(taxonomy) {
-            console.log(taxonomy);
-            
+            // console.log(taxonomy);
+
             if (this.isActive(taxonomy.databaseId)) {
                 this.hide(taxonomy.databaseId);
                 taxonomy.children.edges.forEach(child => this.hide(child.node.databaseId));
@@ -132,9 +118,9 @@ export default {
                 // console.log('Child', this.isActive(child.node.databaseId))
                 this.isActive(child.node.databaseId) ? childrenChecked++ : childrenChecked = childrenChecked;
             });
-            
-            console.log('Total Item Children Count',  item.children.edges.length)
-            console.log('Number of Children Selected', childrenChecked)
+
+            // console.log('Total Item Children Count',  item.children.edges.length)
+            // console.log('Number of Children Selected', childrenChecked)
             return Boolean((item.children.edges.length !== childrenChecked) && (childrenChecked !== 0));
         }
     }

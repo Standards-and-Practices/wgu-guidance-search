@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.filter-button{
+	@apply break-normal mx-auto uppercase text-center w-28;
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 9px;
+	line-height: 130%;
+}

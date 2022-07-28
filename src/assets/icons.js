@@ -6,6 +6,7 @@ import assessmentInactive from './assessment-inactive.svg';
 import assessment from './assessment.svg';
 import checked from './checked.svg'; 
 import comments from './comments.svg';
+import contact from './contact.svg';
 import deselect from './deselect.png';
 import diversityEquityInclusionInactive from './diversity-equity-inclusion-inactive.svg';
 import diversityEquityInclusion from './diversity-equity-inclusion.svg';
@@ -38,6 +39,8 @@ const icons = {
 	assessment,
 	checked,
 	comments,
+	contact,
+	deselect,
 	diversityEquityInclusionInactive,
 	diversityEquityInclusion,
 	instructionalDesignInactive,
