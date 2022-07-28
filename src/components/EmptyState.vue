@@ -71,7 +71,7 @@ export default {
             this.$store.dispatch("setSearch", "")
 
             if(filterName !== "domains") {
-                this.store.dispatch("setDomainFilters")
+                this.$store.dispatch('showAllDomains');
             }
 
         },

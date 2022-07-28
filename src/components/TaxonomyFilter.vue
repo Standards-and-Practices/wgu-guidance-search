@@ -102,9 +102,7 @@ export default {
         clearFilters() {
 
             // Dispatch vuex action that clears all active item filters.
-            this.$store.dispatch(`clearFilters`, {
-                filterName: this.filterName
-            });
+            this.$store.dispatch(`clearFilters`, this.filterName);
 
             // Clear array of child filters are open.
             this.showChildren = []
