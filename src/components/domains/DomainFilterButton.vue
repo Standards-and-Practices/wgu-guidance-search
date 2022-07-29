@@ -1,8 +1,15 @@
 <template>
+<div>
 	<div class="flex-column">
 		<img class="w-30 mx-auto mb-2" :src="isActive(domain.databaseId) ? domain.displaySettings.activeIcon.sourceUrl : domain.displaySettings.inactiveIcon.sourceUrl" />
 		<p class="filter-button" :style="{ color: domain?.displaySettings?.color }">{{ domain.name }}</p>
 	</div>
+	<div v-if="$apollo.loading" v-for="button in 7">
+		<Skeletor width="31" height="31" circle class="w-30 mx-auto mb-2" />
+		<Skeletor width="120" height="8" class="mb-2"/>
+		<Skeletor width="120" height="8" class="mb-2"/>
+	</div>
+</div>
 </template>
 
 <script>

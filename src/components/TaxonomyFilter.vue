@@ -1,38 +1,36 @@
 <template>
-    <Suspense>
-        <template #default>
-            <div class="mb-5">
-                <div class="filter-title capitalize">{{ filterName }}</div>
-                <ul>
-                    <li v-for="(item, index) in items" :key="item.node.databaseId">
+    <div class="mb-5">
+        <div class="filter-title capitalize">{{ filterName }}</div>
+        <ul>
+            <li v-for="item in 7" v-if="loading"> 
+                <Skeletor width="16" class="mr-4" />
+                <Skeletor width="120"/>
+            </li>
+            <li v-for="(item, index) in items" :key="item.node.databaseId" v-if="!loading" >
+                <Checkbox @click="toggleChildren(item.node)" :modelValue="isActive(item.node.databaseId)" :isSemiChecked="isSemiChecked(item.node)" :label="item.node.name" />
+                <Toggle v-model="showChildren[index]" v-if="item?.node?.children?.edges?.length" class="ml-1" />
 
-                        <Checkbox @click="toggleChildren(item.node)" :modelValue="isActive(item.node.databaseId)" :isSemiChecked="isSemiChecked(item.node)" :label="item.node.name" />
-                        <Toggle v-model="showChildren[index]" v-if="item?.node?.children?.edges?.length" class="ml-1" />
-
-                        <ul class="block" v-if="showChildren[index]">
-                            <li v-for="child in item?.node?.children?.edges" :key="child.node.databaseId" class="block pl-6">
-                                <Checkbox @click="toggle(child.node.databaseId)" :modelValue="isActive(child.node.databaseId)" :label="child.node.name" class="capitalize" />
-                            </li>
-                        </ul>
-
-                    </li>
-
-                    <li @click="clearFilters" v-if="activeItems.length" class="mt-5">
-                        <img :src="expandAll" alt="Show All" class="w-20" />
+                <ul class="block" v-if="showChildren[index]">
+                    <li v-for="child in item?.node?.children?.edges" :key="child.node.databaseId" class="block pl-6">
+                        <Checkbox @click="toggle(child.node.databaseId)" :modelValue="isActive(child.node.databaseId)" :label="child.node.name" class="capitalize" />
                     </li>
                 </ul>
-            </div>
-        </template>
-        <template #fallback>
-            <div>Loading taxonomy</div>
-        </template>
-    </Suspense>
+
+            </li>
+
+            <li @click="clearFilters" v-if="activeItems.length" class="mt-5">
+                <img :src="expandAll" alt="Show All" class="w-20" />
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
 import Checkbox from "./atoms/Checkbox.vue"
 import Toggle from "./atoms/Toggle.vue";
 import expandAll from '../assets/expand-all.svg'
+
+
 export default {
     name: "TaxonomyFilter",
     components: { Checkbox, Toggle },
@@ -52,7 +50,7 @@ export default {
         return {
             showChildren: [],
             expandAll,
-        }
+        };
     },
     methods: {
         toggle(databaseId) {
@@ -120,6 +118,11 @@ export default {
             // console.log('Total Item Children Count',  item.children.edges.length)
             // console.log('Number of Children Selected', childrenChecked)
             return Boolean((item.children.edges.length !== childrenChecked) && (childrenChecked !== 0));
+        }
+    },
+    computed: {
+        loading() {
+            return this?.$apollo?.queries[this?.filterName]?.loading || false;
         }
     }
 }

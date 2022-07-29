@@ -22,6 +22,7 @@
     "vue-apollo": "^3.1.0",
     "vue-resource": "^1.5.3",
     "vue-search-input": "^1.1.7",
+    "vue-skeletor": "^1.0.6",
     "vuex": "^4.0.2",
     "vuex-persist": "^3.1.3"
   },

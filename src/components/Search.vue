@@ -4,27 +4,47 @@
       <DomainFilter />
     </div>
     <div class="w-3/4 my-8 mx-auto">
-      <SearchInput type="search" v-model="search" wrapperClass="search-input-wrapper" placeholder="Search Standards & Guidance" :searchIcon="true" :shortcutIcon="true" :clearIcon="true" :hideShortcutIconOnBlur="true" :clearOnEsc="true" :blurOnEsc="true" :selectOnFocus="true" :shortcutListenerEnabled="true" />
+      <SearchInput 
+        type="search" 
+        v-model="search" 
+        wrapperClass="search-input-wrapper" 
+        placeholder="Search Standards & Guidance" 
+        :searchIcon="true" 
+        :shortcutIcon="true" 
+        :clearIcon="true" 
+        :hideShortcutIconOnBlur="true" 
+        :clearOnEsc="true" 
+        :blurOnEsc="true" 
+        :selectOnFocus="true" 
+        :shortcutListenerEnabled="true" 
+      />
     </div>
   </div>
   <div class="container flex">
     <div class="w-1/3">
-      <TaxonomyFilter filterName="assets" :items="assets.edges" :activeItems="activeAssetFilters" v-if="assets?.edges" />
-      <TaxonomyFilter filterName="approaches" :items="approaches.edges" :activeItems="activeApproachFilters" v-if="approaches?.edges" />
+
+      <TaxonomyFilter filterName="assets" :items="assets?.edges" :activeItems="activeAssetFilters"  />
+      <TaxonomyFilter filterName="approaches" :items="approaches?.edges" :activeItems="activeApproachFilters" />
+
     </div>
     <div class="w-2/3 flex-col">
 
-      <div v-if="standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.loading">
+      <div v-if="$apollo.queries.standards.loading">
+        <!-- Display the loader skeletons -->
+        <SkeletonStandard :standard="false" v-for="(standard, index) in 12" :key="index" />
+      </div>
+
+      <div v-if="standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.queries.standards.loading">
+        <!-- If there are results, show them. -->
         <Standard :standard="standard.node" v-for="standard in standards.edges" :key="standard.id" />
       </div>
 
-
-      <div v-if="!standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.loading">
+      <div v-if="!standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.queries.standards.loading">
         <!-- If there aren't any results, but domains are selected, and it's not loading, show an empty state message. -->
         <EmptyState />
       </div>
 
-      <div v-if="activeDomainFilters.length == 0 && !$apollo.loading">
+      <div v-if="activeDomainFilters.length == 0 && !$apollo.queries.standards.loading">
         <!-- If there aren't any results, but domains are selected, and it's not loading, show an empty state message. -->
         <EmptyDomainState />
       </div>
@@ -39,8 +59,8 @@ import DomainFilter from './domains/DomainFilter.vue';
 import TaxonomyFilter from './TaxonomyFilter.vue';
 import EmptyState from './empty/EmptyState.vue';
 import EmptyDomainState from './empty/EmptyDomainState.vue';
+import SkeletonStandard from './skeletons/SkeletonStandard.vue';
 import SearchInput from 'vue-search-input';
-import 'vue-search-input/dist/styles.css';
 
 import queries from '../queries.js';
 import {
@@ -54,7 +74,7 @@ import type { RootQueryToStandardConnectionWhereArgs, RootQueryToStandardConnect
 
 export default {
   name: 'Search',
-  components: { EmptyState, EmptyDomainState, SearchInput, Standard, DomainFilter, TaxonomyFilter },
+  components: { EmptyState, EmptyDomainState, SearchInput, Standard, DomainFilter, SkeletonStandard, TaxonomyFilter },
   apollo: {
     approaches: {
       query: queries.getApproaches,
@@ -117,7 +137,6 @@ export default {
     if (globalThis.search) {
       this.search = globalThis.search;
     }
-
   },
   computed: {
     activeApproachFilters() {
@@ -180,7 +199,7 @@ export default {
         this.$store.dispatch('setSearch', value);
       },
     }
-  }
+  },
 }
 </script>
 

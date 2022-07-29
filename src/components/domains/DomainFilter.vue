@@ -1,5 +1,5 @@
 <template>
-	<div class="flex gap-2 flex-row justify-center my-4">
+	<div class="flex gap-2 flex-row justify-center my-4" v-if="!$apollo.loading">
 		<!-- Loop the DomainFilterButtons -->
 		<DomainFilterButton :domain="domain" v-for="domain in domains" :key="domain.filter" @click="toggle(domain.databaseId)" />
 
@@ -9,6 +9,7 @@
 		<!-- Hide All Button -->
 		<HideAllButton />
 	</div>
+	
 </template>
 
 <script>
