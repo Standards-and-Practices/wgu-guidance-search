@@ -5,7 +5,7 @@
             <DomainName v-for="(domain, index) in standard?.domains?.edges" :domain="domain.node" key="index" v-if="standard"/>
         </div>
         <span class="text-2xl font-bold">
-            <a class="text-black" :href="standard?.link">{{ standard?.title }}</a>
+            <a class="standard-title" :href="standard?.link">{{ standard?.title }}</a>
             <Toggle v-model="open" v-if="standard?.guidance?.guidance" class="ml-3" />
         </span>
         <div class="w-full flex min-h-max" :style="{ color: computedColor }">
@@ -64,7 +64,9 @@ export default {
     height: auto;
     min-height: 100px;
 }
-
+.standard-title { 
+    color: #000000!important;
+}
 .principle-name {
     @apply uppercase font-bold text-center text-xs;
     font-size: 8px;
