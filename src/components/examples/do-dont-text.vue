@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-row gap-5 py-5">
         <div class="do-dont-block do">
-            <h3 class="font-bold py-2">{{ example.doText }}</h3>
-            {{ example.doDescription }}
+            <h3 class="font-bold py-2" v-html="example.doText"></h3>
+            <div v-html="example.doDescription"></div>
         </div>
         <div class="do-dont-block dont">
-            <h3 class="font-bold py-2">{{ example.dontText }}</h3>
-            {{ example.dontDescription }}
+            <h3 class="font-bold py-2" v-html="example.dontText "></h3>
+            <div v-html="example.dontDescription"></div>
         </div>
     </div>
 </template>

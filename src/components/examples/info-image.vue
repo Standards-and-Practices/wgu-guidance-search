@@ -3,7 +3,7 @@
 
         <div class="info-block info">
             <img :src="example.doImage.sourceUrl" />
-            <div class="caption">{{ example.doCaption }}</div>
+            <div class="caption" v-html="example.doCaption"></div>
         </div>
 
     </div>

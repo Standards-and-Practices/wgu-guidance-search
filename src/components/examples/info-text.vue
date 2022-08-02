@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-row gap-5 py-5 ">
         <div class="info-block info">
-            <h3 class="py-2">{{ example.text }}</h3>
+            <h3 class="py-2" v-html="example.text"></h3>
         </div>
     </div>
 </template>

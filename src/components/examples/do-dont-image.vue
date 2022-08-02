@@ -3,14 +3,14 @@
 
         <div class="do-dont-block do">
             <img :src="example.doImage.sourceUrl" />
-            <div class="caption">{{ example.doCaption }}</div>
+            <div class="caption" v-html="example.doCaption"></div>
 
         </div>
 
 
         <div class="do-dont-block dont">
             <img :src="example.dontImage.sourceUrl" />
-            <div class="caption">{{ example.dontCaption }}</div>
+            <div class="caption" v-html="example.dontCaption"></div>
 
         </div>
 
@@ -34,10 +34,12 @@ export default {
     border-left-width: 16px;
     padding: 16px;
 }
-.do-dont-block img{
+
+.do-dont-block img {
     @apply mx-auto;
     max-height: 300px;
 }
+
 .do {
     border-left-color: #4FAE59;
 }
