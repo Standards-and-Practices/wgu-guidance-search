@@ -1,19 +1,14 @@
 <template>
     <div class="flex flex-row gap-5 py-5">
-
         <div class="do-dont-block do">
             <img :src="example.doImage.sourceUrl" />
             <div class="caption" v-html="example.doCaption"></div>
 
         </div>
-
-
         <div class="do-dont-block dont">
             <img :src="example.dontImage.sourceUrl" />
             <div class="caption" v-html="example.dontCaption"></div>
-
         </div>
-
     </div>
 </template>
 <script>
