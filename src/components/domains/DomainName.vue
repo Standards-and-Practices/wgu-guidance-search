@@ -35,7 +35,8 @@ export default {
     font-size: 8px;
     line-height: 11px;
 }
-.domain-icon{
+
+.domain-icon {
     @apply block w-10 absolute mt-4;
     margin-left: 18px;
 }
