@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 :style="{ 'border-left-color': color }" class="font-bold text-base border-l-4 -mx-10 mt-1 px-10 pt-3">{{ guidance.guidanceStatement }}</h2>
+        <h2 :style="{ 'border-left-color': color }" class="font-bold text-base border-l-4 -mx-10 px-10 pt-3">{{ guidance.guidanceStatement }}</h2>
         <div :style="{ 'border-left-color': colorFaded }" class="border-l-4 border-dashed -mx-10 px-10">
             <span v-html="guidance.guidanceRationale"></span>
             <component :is="getExample(example.__typename)" v-for="(example, index) in guidance.guidanceExamples" :key="index" :example="example" class="-mx-10 px-10" :style="{ 'border-left-color': colorFaded }"></component>

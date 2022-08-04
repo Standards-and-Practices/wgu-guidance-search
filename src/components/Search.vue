@@ -29,22 +29,22 @@
     </div>
     <div class="w-2/3 flex-col">
 
-      <div v-if="$apollo.queries.standards.loading">
+      <div v-if="$apollo.queries.standards.loading || ! standardsAreReady">
         <!-- Display the loader skeletons -->
         <SkeletonStandard :standard="false" v-for="(standard, index) in 12" :key="index" />
       </div>
 
-      <div v-if="standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.queries.standards.loading">
+      <div v-if="standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.queries.standards.loading && standardsAreReady">
         <!-- If there are results, show them. -->
         <Standard :standard="standard.node" v-for="standard in standards.edges" :key="standard.id" />
       </div>
 
-      <div v-if="!standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.queries.standards.loading">
+      <div v-if="!standards?.edges.length && activeDomainFilters.length > 0 && !$apollo.queries.standards.loading && standardsAreReady">
         <!-- If there aren't any results, but domains are selected, and it's not loading, show an empty state message. -->
         <EmptyState />
       </div>
 
-      <div v-if="activeDomainFilters.length == 0 && !$apollo.queries.standards.loading">
+      <div v-if="activeDomainFilters.length == 0 && !$apollo.queries.standards.loading && standardsAreReady">
         <!-- If there aren't any results, but domains are selected, and it's not loading, show an empty state message. -->
         <EmptyDomainState />
       </div>
@@ -85,7 +85,7 @@ export default {
         raw.forEach(approach => { polished.push(approach.node); })
 
         this.$store.dispatch('setApproaches', polished)
-
+        this.approachesAreReady = true
       }
     },
     assets: {
@@ -97,6 +97,7 @@ export default {
         raw.forEach(asset => { polished.push(asset.node); })
 
         this.$store.dispatch('setAssets', polished)
+        this.assetsAreReady = true
 
       }
     },
@@ -116,6 +117,8 @@ export default {
           localStorage.setItem('wgu-guidance-initialized', 'true');
         }
 
+        this.domainsAreReady = true
+
       }
     },
     standards: {
@@ -129,8 +132,17 @@ export default {
       debounce: 750,
       result(results) {
         this.$store.dispatch('setStandards', results?.data?.standards?.edges)
+        this.standardsAreReady = true
       }
     },
+  },
+  data () {
+    return {
+        standardsAreReady: false,
+        approachesAreReady: false,
+        assetsAreReady: false,
+        domainsAreReady: false, 
+    }
   },
   mounted() {
     // Allow a PHP variable to set a global search term, which is then picked up by our JS component as an initial search.
