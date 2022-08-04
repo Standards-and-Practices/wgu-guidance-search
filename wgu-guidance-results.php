@@ -30,6 +30,8 @@ function wgu_guidance_scripts($hook) {
         $file_formatted = str_replace('/var/www/webroot/ROOT', '', $file);
         do_action( 'qm/debug', $file_formatted );
         wp_enqueue_script( 'wgu_guidance_search_script', $file_formatted);
+        wp_dequeue_style( 'hello-elementor' );
+        wp_dequeue_style( 'hello-elementor-theme-style' );
     };
 
 }
