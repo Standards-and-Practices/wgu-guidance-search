@@ -1,4 +1,4 @@
-<template lang="">
+<template>
    <div class="standard mb-8">
             <div>
                 <Skeletor width="70" height="70" circle class="answer-mark-skeleton" />

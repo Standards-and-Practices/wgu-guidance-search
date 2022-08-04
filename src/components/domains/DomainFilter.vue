@@ -1,7 +1,7 @@
 <template>
-	<div class="flex gap-2 flex-row justify-center my-4" v-if="!$apollo.loading">
+	<div class="flex gap-2 flex-row justify-center my-4">
 		<!-- Loop the DomainFilterButtons -->
-		<DomainFilterButton :domain="domain" v-for="domain in domains" :key="domain.filter" @click="toggle(domain.databaseId)" />
+		<DomainFilterButton :ready="ready" :domain="domain" v-for="domain in domains" :key="domain.filter" @click="toggle(domain.databaseId)" />
 
 		<!-- Show All Button -->
 		<ShowAllButton />
@@ -20,6 +20,12 @@
 	export default {
 		name: 'DomainFilter',
 		components: { DomainFilterButton, ShowAllButton, HideAllButton },
+		props: {
+			ready: {
+				type: Boolean,
+				default: false,
+			},
+		},
 		data() {
 			return {
 				all: icons.all,

@@ -2,11 +2,11 @@
     <div class="mb-5">
         <div class="filter-title capitalize">{{ filterName }}</div>
         <ul>
-            <li v-for="item in 7" v-if="loading"> 
+            <li v-for="item in 7" v-if="!ready">
                 <Skeletor width="16" class="mr-4" />
-                <Skeletor width="120"/>
+                <Skeletor width="120" />
             </li>
-            <li v-for="(item, index) in items" :key="item.node.databaseId" v-if="!loading" >
+            <li v-for="(item, index) in items" :key="item.node.databaseId" v-if="ready">
                 <Checkbox @click="toggleChildren(item.node)" :modelValue="isActive(item.node.databaseId)" :isSemiChecked="isSemiChecked(item.node)" :label="item.node.name" />
                 <Toggle v-model="showChildren[index]" v-if="item?.node?.children?.edges?.length" class="ml-1" />
 
@@ -30,11 +30,14 @@ import Checkbox from "./atoms/Checkbox.vue"
 import Toggle from "./atoms/Toggle.vue";
 import expandAll from '../assets/expand-all.svg'
 
-
 export default {
     name: "TaxonomyFilter",
     components: { Checkbox, Toggle },
     props: {
+        ready: {
+            type: Boolean,
+            default: false,
+        },
         filterName: {
             type: String,
             required: true,

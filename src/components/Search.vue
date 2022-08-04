@@ -1,35 +1,20 @@
 <template>
   <div>
     <div class="w-full">
-      <DomainFilter />
+      <DomainFilter :ready="domainsAreReady"/>
     </div>
     <div class="w-3/4 my-8 mx-auto">
-      <SearchInput 
-        type="search" 
-        v-model="search" 
-        wrapperClass="search-input-wrapper" 
-        placeholder="Search Standards & Guidance" 
-        :searchIcon="true" 
-        :shortcutIcon="true" 
-        :clearIcon="true" 
-        :hideShortcutIconOnBlur="true" 
-        :clearOnEsc="true" 
-        :blurOnEsc="true" 
-        :selectOnFocus="true" 
-        :shortcutListenerEnabled="true" 
-      />
+      <SearchInput type="search" v-model="search" wrapperClass="search-input-wrapper" placeholder="Search Standards & Guidance" :searchIcon="true" :shortcutIcon="true" :clearIcon="true" :hideShortcutIconOnBlur="true" :clearOnEsc="true" :blurOnEsc="true" :selectOnFocus="true" :shortcutListenerEnabled="true" />
     </div>
   </div>
   <div class="container flex">
     <div class="w-1/3">
-
-      <TaxonomyFilter filterName="assets" :items="assets?.edges" :activeItems="activeAssetFilters"  />
-      <TaxonomyFilter filterName="approaches" :items="approaches?.edges" :activeItems="activeApproachFilters" />
-
+      <TaxonomyFilter :ready="assetsAreReady" filterName="assets" :items="assets?.edges" :activeItems="activeAssetFilters" />
+      <TaxonomyFilter :ready="approachesAreReady" filterName="approaches" :items="approaches?.edges" :activeItems="activeApproachFilters" />
     </div>
     <div class="w-2/3 flex-col">
 
-      <div v-if="$apollo.queries.standards.loading || ! standardsAreReady">
+      <div v-if="$apollo.queries.standards.loading || !standardsAreReady">
         <!-- Display the loader skeletons -->
         <SkeletonStandard :standard="false" v-for="(standard, index) in 12" :key="index" />
       </div>
@@ -136,12 +121,12 @@ export default {
       }
     },
   },
-  data () {
+  data() {
     return {
-        standardsAreReady: false,
-        approachesAreReady: false,
-        assetsAreReady: false,
-        domainsAreReady: false, 
+      standardsAreReady: false,
+      approachesAreReady: false,
+      assetsAreReady: false,
+      domainsAreReady: false,
     }
   },
   mounted() {
