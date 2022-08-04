@@ -1,6 +1,6 @@
 <template>
 <span class="inline">
-    <img  class="inline" :src="plus" v-if="!modelValue" @click="toggle"/>
+    <img class="inline" :src="plus" v-if="!modelValue" @click="toggle"/>
     <img class="inline" :src="minus" v-if="modelValue"  @click="toggle"/>
 </span>
 </template>

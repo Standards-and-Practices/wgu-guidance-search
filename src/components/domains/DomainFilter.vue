@@ -4,10 +4,10 @@
 		<DomainFilterButton :ready="ready" :domain="domain" v-for="domain in domains" :key="domain.filter" @click="toggle(domain.databaseId)" />
 
 		<!-- Show All Button -->
-		<ShowAllButton />
-
+		<ShowAllButton :ready="ready" />
+		
 		<!-- Hide All Button -->
-		<HideAllButton />
+		<HideAllButton :ready="ready" />
 	</div>
 	
 </template>
