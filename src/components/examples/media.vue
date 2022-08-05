@@ -12,13 +12,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .media-example {
-        @apply mx-auto;
-        max-height: 300px;
-        max-width: 300px;
-        background-size: contain;
-        background-repeat: no-repeat;
-
+        @apply !mx-auto !bg-contain !bg-no-repeat !max-w-xs !max-h-80;
     }
 </style>
