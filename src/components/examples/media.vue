@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style>
-    .media-example img{
+    .media-example {
         @apply mx-auto w-1/2 aspect-auto;
         max-height: 300px;
     }
