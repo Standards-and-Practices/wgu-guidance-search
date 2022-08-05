@@ -14,7 +14,11 @@ export default {
 
 <style>
     .media-example {
-        @apply mx-auto w-1/2 aspect-auto;
+        @apply mx-auto;
         max-height: 300px;
+        max-width: 300px;
+        background-size: contain;
+        background-repeat: no-repeat;
+
     }
 </style>
